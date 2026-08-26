@@ -1,5 +1,5 @@
 export const environment = {
-    production: false,
-    apiBaseUrl: 'http://localhost:8080',
+    production: true,
+    apiBaseUrl: 'https://telestore-4pml.onrender.com',
     appName: 'TeleStore'
 };
