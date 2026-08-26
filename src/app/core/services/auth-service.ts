@@ -10,23 +10,34 @@ export class AuthService {
     private readonly TOKEN_KEY = "auth-token";
     private baseUrl = environment.apiBaseUrl;
 
-    currentUserToken = signal<string | null>(localStorage.getItem(this.TOKEN_KEY));
+    private authenticated = signal(
+        !!localStorage.getItem(this.TOKEN_KEY)
+    );
 
-    login(credentials: { email: string, password: string }): Observable<AuthResponse> {
-        return this.http.post<AuthResponse>(`${this.baseUrl}/api/auth/login`, credentials).pipe(
-            tap(response => {
-                localStorage.setItem(this.TOKEN_KEY, response.token);
-                this.currentUserToken.set(response.token);
-            })
-        );
+    readonly isLoggedIn = this.authenticated.asReadonly();
+    readonly googleOAuth2Url = signal<string>(`${this.baseUrl}/oauth2/authorization/google`);
+
+    setToken(token: string): void {
+        localStorage.setItem(this.TOKEN_KEY, token);
+        this.authenticated.set(true);
+    }
+
+    getToken(): string | null {
+        return localStorage.getItem(this.TOKEN_KEY);
     }
 
     logout(): void {
         localStorage.removeItem(this.TOKEN_KEY);
-        this.currentUserToken.set(null);
+        this.authenticated.set(false);
     }
 
-    isLoggedIn(): boolean {
-        return this.currentUserToken() !== null;
+    register(credentials: { name: string, email: string, password: string }): Observable<void> {
+        return this.http.post<void>(`${this.baseUrl}/api/auth/register`, credentials);
+    }
+
+    login(credentials: { email: string, password: string }): Observable<AuthResponse> {
+        return this.http.post<AuthResponse>(`${this.baseUrl}/api/auth/login`, credentials).pipe(
+            tap(response => this.setToken(response.token))
+        );
     }
 };
