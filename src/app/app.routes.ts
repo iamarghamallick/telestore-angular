@@ -5,6 +5,7 @@ import { DashboardComponent } from './features/dashboard-component/dashboard-com
 import { HomeComponent } from './features/home-component/home-component';
 import { RegisterComponent } from './features/register-component/register-component';
 import { OauthSuccessComponent } from './features/oauth-success-component/oauth-success-component';
+import { ProfileComponent } from './features/profile-component/profile-component';
 
 export const routes: Routes = [
     {
@@ -29,6 +30,11 @@ export const routes: Routes = [
     {
         path: 'dashboard',
         component: DashboardComponent,
+        canActivate: [authGuard],
+    },
+    {
+        path: 'profile',
+        component: ProfileComponent,
         canActivate: [authGuard],
     },
 ];
