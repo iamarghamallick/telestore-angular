@@ -1,1 +1,208 @@
-<p>dashboard-component works!</p>
+<div class="min-h-[calc(100vh-4rem)] bg-gray-50">
+
+    <!-- Header -->
+    <div class="border-b bg-white">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">
+                    My Files
+                </h1>
+
+                <p class="mt-1 text-sm text-gray-500">
+                    Upload and manage your files
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Main -->
+    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+
+        <div class="max-w-2xl">
+
+            <!-- Upload Card -->
+            <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+
+                <div class="mb-6">
+
+                    <h2 class="text-lg font-semibold text-gray-900">
+                        Upload file
+                    </h2>
+
+                    <p class="mt-1 text-sm text-gray-500">
+                        Select a file and choose where you want to store it.
+                    </p>
+
+                </div>
+
+
+                <!-- File picker -->
+                <label
+                    class="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 text-center transition hover:border-blue-400 hover:bg-blue-50">
+
+                    <div class="mb-3 text-4xl">
+                        📁
+                    </div>
+
+                    <span class="text-sm font-medium text-gray-700">
+                        Choose a file
+                    </span>
+
+                    <span class="mt-1 text-xs text-gray-500">
+                        Click here to browse your computer
+                    </span>
+
+                    <input type="file" class="hidden" [disabled]="uploading()" (change)="onFileSelected($event)" />
+
+                </label>
+
+
+                <!-- Selected file -->
+                @if (selectedFile(); as file) {
+
+                <div class="mt-5 rounded-lg border bg-gray-50 p-4">
+
+                    <div class="flex items-center justify-between gap-4">
+
+                        <div class="min-w-0">
+
+                            <p class="truncate text-sm font-medium text-gray-900">
+                                {{ file.name }}
+                            </p>
+
+                            <p class="mt-1 text-xs text-gray-500">
+                                {{ file.size | number }} bytes
+                            </p>
+
+                        </div>
+
+                        @if (!uploading()) {
+
+                        <button type="button" (click)="removeSelectedFile()"
+                            class="shrink-0 text-sm font-medium text-red-600 hover:text-red-700">
+
+                            Remove
+
+                        </button>
+
+                        }
+
+                    </div>
+
+                </div>
+
+                }
+
+
+                <!-- Folder -->
+                <div class="mt-6">
+
+                    <label for="folder" class="mb-2 block text-sm font-medium text-gray-700">
+
+                        Folder
+
+                    </label>
+
+                    <select id="folder" [value]="selectedFolderId()"
+                        (change)="selectedFolderId.set($any($event.target).value)" [disabled]="uploading()"
+                        class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+
+                        <option value="">
+                            Select a folder
+                        </option>
+
+                        <!-- Temporary -->
+                        <option value="root">
+                            Root
+                        </option>
+
+                    </select>
+
+                    <p class="mt-1.5 text-xs text-gray-500">
+                        Choose the folder where this file will be stored.
+                    </p>
+
+                </div>
+
+
+                <!-- Progress -->
+                @if (uploading()) {
+
+                <div class="mt-6">
+
+                    <div class="mb-2 flex justify-between text-sm">
+
+                        <span class="font-medium text-gray-700">
+                            Uploading...
+                        </span>
+
+                        <span class="text-gray-500">
+                            {{ uploadProgress() }}%
+                        </span>
+
+                    </div>
+
+                    <div class="h-2 overflow-hidden rounded-full bg-gray-200">
+
+                        <div class="h-full rounded-full bg-blue-600 transition-all duration-300"
+                            [style.width.%]="uploadProgress()">
+                        </div>
+
+                    </div>
+
+                </div>
+
+                }
+
+
+                <!-- Success -->
+                @if (uploadSuccess()) {
+
+                <div class="mt-5 rounded-lg border border-green-200 bg-green-50 px-4 py-3">
+
+                    <p class="text-sm font-medium text-green-800">
+                        File uploaded successfully.
+                    </p>
+
+                </div>
+
+                }
+
+
+                <!-- Error -->
+                @if (uploadError(); as error) {
+
+                <div class="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
+
+                    <p class="text-sm font-medium text-red-800">
+                        {{ error }}
+                    </p>
+
+                </div>
+
+                }
+
+
+                <!-- Upload button -->
+                <button type="button" (click)="uploadFile()"
+                    [disabled]="uploading() || !selectedFile() || !selectedFolderId()"
+                    class="mt-6 w-full cursor-pointer rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50">
+
+                    @if (uploading()) {
+                    Uploading...
+                    } @else {
+                    Upload file
+                    }
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
