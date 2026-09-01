@@ -8,6 +8,10 @@
         <!-- Desktop Navigation -->
         @if (isLoggedIn()) {
         <div class="hidden items-center gap-6 md:flex">
+            <a routerLink="/dashboard" routerLinkActive="text-blue-600"
+                class="text-sm font-medium text-gray-600 hover:text-blue-600">
+                Dashboard
+            </a>
             <a routerLink="/files" routerLinkActive="text-blue-600"
                 class="text-sm font-medium text-gray-600 hover:text-blue-600">
                 Files
@@ -60,6 +64,10 @@
     <div class="border-t bg-white px-4 py-4 md:hidden">
         @if (isLoggedIn()) {
         <div class="flex flex-col gap-2">
+            <a routerLink="/dashboard" (click)="closeMenu()"
+                class="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100">
+                Dashboard
+            </a>
             <a routerLink="/files" (click)="closeMenu()"
                 class="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100">
                 Files

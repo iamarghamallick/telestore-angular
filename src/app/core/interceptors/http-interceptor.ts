@@ -44,7 +44,10 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
 
     return next(modifiedReq).pipe(
         catchError((error) => {
-            if (error instanceof HttpErrorResponse) {
+            if (
+                error instanceof HttpErrorResponse &&
+                (error.status === 401 || error.status === 403)
+            ) {
                 forceLogout();
             }
             return throwError(() => error);
