@@ -1,1 +1,762 @@
-<p>home-component works!</p>
+<main>
+
+    <section class="overflow-hidden bg-white">
+        <div class="mx-auto max-w-7xl px-6 pb-20 pt-20 lg:px-8 lg:pb-28 lg:pt-28">
+
+            <div class="grid items-center gap-16 lg:grid-cols-2">
+
+                <!-- Hero copy -->
+                <div class="max-w-xl">
+
+                    <div
+                        class="mb-6 inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700">
+
+                        <span class="h-1.5 w-1.5 rounded-full bg-indigo-600"></span>
+
+                        Simple. Organized. Yours.
+                    </div>
+
+                    <h1 class="text-5xl font-bold tracking-tight text-slate-950 sm:text-6xl lg:text-7xl">
+                        A simpler home for
+                        <span class="text-indigo-600">
+                            everything you create.
+                        </span>
+                    </h1>
+
+                    <p class="mt-6 max-w-lg text-lg leading-8 text-slate-600">
+                        Store, organize and access your files without the clutter.
+                        TeleStore gives you a simple place to keep your files and
+                        folders organized.
+                    </p>
+
+                    <div class="mt-8 flex flex-wrap items-center gap-3">
+
+                        @if (!isLoggedIn()) {
+
+                        <a routerLink="/register"
+                            class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 hover:shadow-md">
+
+                            Get started for free
+
+                            <ng-icon name="heroArrowRight" size="17">
+                            </ng-icon>
+                        </a>
+
+                        <a routerLink="/login"
+                            class="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+                            Log in
+                        </a>
+
+                        } @else {
+
+                        <a routerLink="/drive/my-drive"
+                            class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700">
+
+                            Open your drive
+
+                            <ng-icon name="heroArrowRight" size="17">
+                            </ng-icon>
+                        </a>
+
+                        }
+
+                    </div>
+
+                    <div class="mt-7 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-500">
+
+                        <div class="flex items-center gap-2">
+                            <ng-icon name="heroCheckCircle" size="17" class="text-emerald-500">
+                            </ng-icon>
+                            Unlimited storage
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <ng-icon name="heroCheckCircle" size="17" class="text-emerald-500">
+                            </ng-icon>
+                            Up to 20 MB per file
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Dashboard visual -->
+                <div class="relative">
+
+                    <!-- Decorative background -->
+                    <div class="absolute -inset-8 rounded-[3rem] bg-indigo-50/70 blur-2xl">
+                    </div>
+
+                    <div
+                        class="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-slate-200/70">
+
+                        <!-- Fake browser/header -->
+                        <div class="flex h-12 items-center gap-2 border-b border-slate-200 bg-slate-50 px-4">
+
+                            <div class="h-2.5 w-2.5 rounded-full bg-slate-300"></div>
+                            <div class="h-2.5 w-2.5 rounded-full bg-slate-300"></div>
+                            <div class="h-2.5 w-2.5 rounded-full bg-slate-300"></div>
+
+                            <div
+                                class="ml-4 flex h-7 flex-1 items-center rounded-md border border-slate-200 bg-white px-3 text-[10px] text-slate-400">
+                                /drive/my-drive
+                            </div>
+
+                        </div>
+
+
+                        <!-- Fake dashboard -->
+                        <div class="flex min-h-[390px]">
+
+                            <!-- Sidebar -->
+                            <div class="hidden w-44 border-r border-slate-200 bg-slate-50/70 p-4 sm:block">
+
+                                <div class="mb-7 flex items-center gap-2">
+                                    <div
+                                        class="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-600 text-white">
+                                        <ng-icon name="heroCloudArrowUp" size="14">
+                                        </ng-icon>
+                                    </div>
+
+                                    <span class="text-xs font-bold text-slate-800">
+                                        TeleStore
+                                    </span>
+                                </div>
+
+                                <div class="space-y-1">
+
+                                    <div
+                                        class="flex items-center gap-2 rounded-lg bg-indigo-100 px-3 py-2 text-[10px] font-semibold text-indigo-700">
+                                        <ng-icon name="heroHome" size="13"></ng-icon>
+                                        My Drive
+                                    </div>
+
+                                    <div
+                                        class="flex items-center gap-2 rounded-lg px-3 py-2 text-[10px] text-slate-500">
+                                        <ng-icon name="heroMagnifyingGlass" size="13"></ng-icon>
+                                        Search
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Content -->
+                            <div class="flex-1 p-5">
+
+                                <div class="flex items-center justify-between">
+
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-900">
+                                            My Drive
+                                        </p>
+
+                                        <p class="mt-0.5 text-[9px] text-slate-400">
+                                            Your files and folders
+                                        </p>
+                                    </div>
+
+                                    <div
+                                        class="rounded-lg bg-indigo-600 px-3 py-1.5 text-[9px] font-semibold text-white">
+                                        + Upload
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Folders -->
+                                <div class="mt-6">
+
+                                    <p class="mb-2 text-[9px] font-semibold uppercase tracking-wider text-slate-400">
+                                        Folders
+                                    </p>
+
+                                    <div class="grid grid-cols-2 gap-2">
+
+                                        <div class="flex items-center gap-2 rounded-lg border border-slate-200 p-3">
+
+                                            <div
+                                                class="flex h-7 w-7 items-center justify-center rounded-md bg-amber-50">
+                                                <ng-icon name="heroFolder" size="14" class="text-amber-500">
+                                                </ng-icon>
+                                            </div>
+
+                                            <div>
+                                                <p class="text-[10px] font-semibold text-slate-700">
+                                                    Documents
+                                                </p>
+                                                <p class="text-[8px] text-slate-400">
+                                                    12 files
+                                                </p>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="flex items-center gap-2 rounded-lg border border-slate-200 p-3">
+
+                                            <div
+                                                class="flex h-7 w-7 items-center justify-center rounded-md bg-amber-50">
+                                                <ng-icon name="heroFolder" size="14" class="text-amber-500">
+                                                </ng-icon>
+                                            </div>
+
+                                            <div>
+                                                <p class="text-[10px] font-semibold text-slate-700">
+                                                    Projects
+                                                </p>
+                                                <p class="text-[8px] text-slate-400">
+                                                    8 files
+                                                </p>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Files -->
+                                <div class="mt-6">
+
+                                    <p class="mb-2 text-[9px] font-semibold uppercase tracking-wider text-slate-400">
+                                        Recent files
+                                    </p>
+
+                                    <div class="divide-y divide-slate-100 rounded-lg border border-slate-200">
+
+                                        <div class="flex items-center gap-3 px-3 py-2.5">
+
+                                            <div
+                                                class="flex h-7 w-7 items-center justify-center rounded-md bg-indigo-50">
+                                                <ng-icon name="heroDocumentText" size="14" class="text-indigo-500">
+                                                </ng-icon>
+                                            </div>
+
+                                            <div class="flex-1">
+                                                <p class="text-[10px] font-medium text-slate-700">
+                                                    Project Report.pdf
+                                                </p>
+                                                <p class="text-[8px] text-slate-400">
+                                                    2.4 MB
+                                                </p>
+                                            </div>
+
+                                            <span class="text-[8px] text-slate-400">
+                                                Today
+                                            </span>
+
+                                        </div>
+
+                                        <div class="flex items-center gap-3 px-3 py-2.5">
+
+                                            <div
+                                                class="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-50">
+                                                <ng-icon name="heroDocument" size="14" class="text-emerald-500">
+                                                </ng-icon>
+                                            </div>
+
+                                            <div class="flex-1">
+                                                <p class="text-[10px] font-medium text-slate-700">
+                                                    Resume.docx
+                                                </p>
+                                                <p class="text-[8px] text-slate-400">
+                                                    840 KB
+                                                </p>
+                                            </div>
+
+                                            <span class="text-[8px] text-slate-400">
+                                                Yesterday
+                                            </span>
+
+                                        </div>
+
+                                        <div class="flex items-center gap-3 px-3 py-2.5">
+
+                                            <div
+                                                class="flex h-7 w-7 items-center justify-center rounded-md bg-orange-50">
+                                                <ng-icon name="heroDocument" size="14" class="text-orange-500">
+                                                </ng-icon>
+                                            </div>
+
+                                            <div class="flex-1">
+                                                <p class="text-[10px] font-medium text-slate-700">
+                                                    Notes.txt
+                                                </p>
+                                                <p class="text-[8px] text-slate-400">
+                                                    18 KB
+                                                </p>
+                                            </div>
+
+                                            <span class="text-[8px] text-slate-400">
+                                                Yesterday
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- =========================================================
+         TRUST / VALUE STRIP
+    ========================================================= -->
+
+    <section class="border-y border-slate-200 bg-slate-50/70">
+
+        <div class="mx-auto grid max-w-7xl grid-cols-2 divide-x divide-slate-200 px-6 py-8 md:grid-cols-4 lg:px-8">
+
+            <div class="px-5 text-center">
+                <p class="text-2xl font-bold text-slate-900">Unlimited</p>
+                <p class="mt-1 text-xs text-slate-500">Storage capacity</p>
+            </div>
+
+            <div class="px-5 text-center">
+                <p class="text-2xl font-bold text-slate-900">20 MB</p>
+                <p class="mt-1 text-xs text-slate-500">Maximum file size</p>
+            </div>
+
+            <div class="mt-6 border-t border-slate-200 px-5 text-center md:mt-0 md:border-t-0">
+                <p class="text-2xl font-bold text-slate-900">Simple</p>
+                <p class="mt-1 text-xs text-slate-500">File organization</p>
+            </div>
+
+            <div class="mt-6 border-t border-slate-200 px-5 text-center md:mt-0 md:border-t-0">
+                <p class="text-2xl font-bold text-slate-900">Searchable</p>
+                <p class="mt-1 text-xs text-slate-500">Find files quickly</p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         FEATURES
+    ========================================================= -->
+
+    <section id="features" class="bg-white">
+
+        <div class="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+
+            <div class="mx-auto max-w-2xl text-center">
+
+                <p class="text-sm font-semibold text-indigo-600">
+                    Everything you need
+                </p>
+
+                <h2 class="mt-3 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+                    Your files, exactly how you want them.
+                </h2>
+
+                <p class="mt-4 text-base leading-7 text-slate-600">
+                    TeleStore keeps file management simple without getting in
+                    your way.
+                </p>
+
+            </div>
+
+
+            <div class="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+
+                <!-- Feature -->
+                <div
+                    class="rounded-2xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1 hover:border-indigo-200 hover:shadow-lg hover:shadow-slate-200/50">
+
+                    <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
+                        <ng-icon name="heroCloudArrowUp" size="22"></ng-icon>
+                    </div>
+
+                    <h3 class="mt-5 font-semibold text-slate-900">
+                        Upload with ease
+                    </h3>
+
+                    <p class="mt-2 text-sm leading-6 text-slate-500">
+                        Upload your files and keep them safely organized in
+                        your personal storage.
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="rounded-2xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1 hover:border-indigo-200 hover:shadow-lg hover:shadow-slate-200/50">
+
+                    <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
+                        <ng-icon name="heroFolder" size="22"></ng-icon>
+                    </div>
+
+                    <h3 class="mt-5 font-semibold text-slate-900">
+                        Organize your way
+                    </h3>
+
+                    <p class="mt-2 text-sm leading-6 text-slate-500">
+                        Create folders, nested folders and move your files
+                        wherever they belong.
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="rounded-2xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1 hover:border-indigo-200 hover:shadow-lg hover:shadow-slate-200/50">
+
+                    <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+                        <ng-icon name="heroMagnifyingGlass" size="22"></ng-icon>
+                    </div>
+
+                    <h3 class="mt-5 font-semibold text-slate-900">
+                        Find anything fast
+                    </h3>
+
+                    <p class="mt-2 text-sm leading-6 text-slate-500">
+                        Search through your stored files and find what you
+                        need without digging through folders.
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="rounded-2xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1 hover:border-indigo-200 hover:shadow-lg hover:shadow-slate-200/50">
+
+                    <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-50 text-violet-600">
+                        <ng-icon name="heroArrowDownTray" size="22"></ng-icon>
+                    </div>
+
+                    <h3 class="mt-5 font-semibold text-slate-900">
+                        Download whenever you need
+                    </h3>
+
+                    <p class="mt-2 text-sm leading-6 text-slate-500">
+                        Access and download your files whenever you need
+                        them.
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="rounded-2xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1 hover:border-indigo-200 hover:shadow-lg hover:shadow-slate-200/50">
+
+                    <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-sky-50 text-sky-600">
+                        <ng-icon name="heroArrowsRightLeft" size="22"></ng-icon>
+                    </div>
+
+                    <h3 class="mt-5 font-semibold text-slate-900">
+                        Move without limits
+                    </h3>
+
+                    <p class="mt-2 text-sm leading-6 text-slate-500">
+                        Move files and folders between locations as your
+                        organization changes.
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="rounded-2xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1 hover:border-indigo-200 hover:shadow-lg hover:shadow-slate-200/50">
+
+                    <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-rose-50 text-rose-600">
+                        <ng-icon name="heroServerStack" size="22"></ng-icon>
+                    </div>
+
+                    <h3 class="mt-5 font-semibold text-slate-900">
+                        Unlimited storage
+                    </h3>
+
+                    <p class="mt-2 text-sm leading-6 text-slate-500">
+                        No storage quota to worry about. Keep your files
+                        without constantly watching your storage meter.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         HOW IT WORKS
+    ========================================================= -->
+
+    <section id="how-it-works" class="bg-slate-50">
+
+        <div class="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+
+            <div class="grid gap-16 lg:grid-cols-2 lg:items-center">
+
+                <div>
+
+                    <p class="text-sm font-semibold text-indigo-600">
+                        How it works
+                    </p>
+
+                    <h2 class="mt-3 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+                        File management without the complexity.
+                    </h2>
+
+                    <p class="mt-5 max-w-lg text-base leading-7 text-slate-600">
+                        TeleStore keeps the workflow straightforward. Create
+                        your space, upload your files and organize them into
+                        folders that make sense to you.
+                    </p>
+
+                </div>
+
+
+                <div class="space-y-4">
+
+                    <div class="flex gap-4 rounded-2xl border border-slate-200 bg-white p-5">
+
+                        <div
+                            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-sm font-bold text-white">
+                            1
+                        </div>
+
+                        <div>
+                            <h3 class="font-semibold text-slate-900">
+                                Create your account
+                            </h3>
+
+                            <p class="mt-1 text-sm leading-6 text-slate-500">
+                                Register and get your own personal TeleStore.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="flex gap-4 rounded-2xl border border-slate-200 bg-white p-5">
+
+                        <div
+                            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-sm font-bold text-white">
+                            2
+                        </div>
+
+                        <div>
+                            <h3 class="font-semibold text-slate-900">
+                                Upload your files
+                            </h3>
+
+                            <p class="mt-1 text-sm leading-6 text-slate-500">
+                                Upload individual files up to 20 MB and keep
+                                them in your personal storage.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="flex gap-4 rounded-2xl border border-slate-200 bg-white p-5">
+
+                        <div
+                            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-sm font-bold text-white">
+                            3
+                        </div>
+
+                        <div>
+                            <h3 class="font-semibold text-slate-900">
+                                Organize and access
+                            </h3>
+
+                            <p class="mt-1 text-sm leading-6 text-slate-500">
+                                Create folders, move files, search your
+                                storage and download what you need.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         SECURITY / PRIVACY
+    ========================================================= -->
+
+    <section id="security" class="bg-white">
+
+        <div class="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+
+            <div class="overflow-hidden rounded-3xl border border-slate-200 bg-slate-950">
+
+                <div class="grid lg:grid-cols-2">
+
+                    <div class="p-8 sm:p-12">
+
+                        <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-white">
+                            <ng-icon name="heroShieldCheck" size="22">
+                            </ng-icon>
+                        </div>
+
+                        <h2 class="mt-6 text-3xl font-bold tracking-tight text-white">
+                            Your files stay yours.
+                        </h2>
+
+                        <p class="mt-4 max-w-lg text-sm leading-7 text-slate-300">
+                            TeleStore is designed around personal file storage.
+                            Your files are associated with your account and
+                            organized inside your own storage space.
+                        </p>
+
+                    </div>
+
+
+                    <div class="grid grid-cols-2 gap-px bg-white/10">
+
+                        <div class="bg-slate-950/60 p-7">
+
+                            <ng-icon name="heroLockClosed" size="20" class="text-indigo-400">
+                            </ng-icon>
+
+                            <h3 class="mt-4 text-sm font-semibold text-white">
+                                Private storage
+                            </h3>
+
+                            <p class="mt-2 text-xs leading-5 text-slate-400">
+                                Your files are tied to your account.
+                            </p>
+
+                        </div>
+
+
+                        <div class="bg-slate-950/60 p-7">
+
+                            <ng-icon name="heroUser" size="20" class="text-indigo-400">
+                            </ng-icon>
+
+                            <h3 class="mt-4 text-sm font-semibold text-white">
+                                Personal space
+                            </h3>
+
+                            <p class="mt-2 text-xs leading-5 text-slate-400">
+                                Keep your files separate and organized.
+                            </p>
+
+                        </div>
+
+
+                        <div class="bg-slate-950/60 p-7">
+
+                            <ng-icon name="heroFolder" size="20" class="text-indigo-400">
+                            </ng-icon>
+
+                            <h3 class="mt-4 text-sm font-semibold text-white">
+                                Organized
+                            </h3>
+
+                            <p class="mt-2 text-xs leading-5 text-slate-400">
+                                Build folder structures that work for you.
+                            </p>
+
+                        </div>
+
+
+                        <div class="bg-slate-950/60 p-7">
+
+                            <ng-icon name="heroMagnifyingGlass" size="20" class="text-indigo-400">
+                            </ng-icon>
+
+                            <h3 class="mt-4 text-sm font-semibold text-white">
+                                Easy to find
+                            </h3>
+
+                            <p class="mt-2 text-xs leading-5 text-slate-400">
+                                Search your files whenever you need them.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         FINAL CTA
+    ========================================================= -->
+
+    <section class="bg-white">
+
+        <div class="mx-auto max-w-4xl px-6 pb-24 text-center lg:px-8">
+
+            <div class="rounded-3xl bg-indigo-600 px-6 py-16 sm:px-12">
+
+                <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-white">
+                    <ng-icon name="heroCloudArrowUp" size="25">
+                    </ng-icon>
+                </div>
+
+                <h2 class="mt-6 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                    Ready to simplify your storage?
+                </h2>
+
+                <p class="mx-auto mt-4 max-w-xl text-sm leading-6 text-indigo-100">
+                    Keep your files organized, searchable and ready whenever
+                    you need them.
+                </p>
+
+                @if (!isLoggedIn()) {
+
+                <a routerLink="/register"
+                    class="mt-8 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-indigo-700 shadow-sm transition hover:bg-indigo-50">
+
+                    Get started with TeleStore
+
+                    <ng-icon name="heroArrowRight" size="17"></ng-icon>
+
+                </a>
+
+                } @else {
+
+                <a routerLink="/drive/my-drive"
+                    class="mt-8 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-indigo-700 shadow-sm transition hover:bg-indigo-50">
+
+                    Open your storage
+
+                    <ng-icon name="heroArrowRight" size="17"></ng-icon>
+
+                </a>
+
+                }
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>

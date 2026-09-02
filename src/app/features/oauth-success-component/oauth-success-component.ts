@@ -24,7 +24,7 @@ export class OauthSuccessComponent {
 
     this.authService.setToken(token);
 
-    this.router.navigate(['/dashboard'], {
+    this.router.navigate(['/drive/my-drive'], {
       replaceUrl: true
     });
   }

@@ -3,14 +3,17 @@ import { AuthService } from '../../../core/services/auth-service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { UserService } from '../../../core/services/user-service';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroBars3, heroXMark } from '@ng-icons/heroicons/outline';
+import { heroBars3, heroCloudArrowUp, heroHome, heroUserCircle, heroXMark } from '@ng-icons/heroicons/outline';
 
 @Component({
   imports: [RouterLink, RouterLinkActive, NgIcon],
   providers: [
     provideIcons({
       heroBars3,
-      heroXMark
+      heroXMark,
+      heroHome,
+      heroUserCircle,
+      heroCloudArrowUp,
     })
   ],
   selector: 'app-navbar-component',

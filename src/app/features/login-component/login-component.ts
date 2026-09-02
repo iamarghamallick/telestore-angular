@@ -23,7 +23,7 @@ export class LoginComponent {
   onSubmit(): void {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.getRawValue()).subscribe({
-        next: () => this.router.navigate(['dashboard']),
+        next: () => this.router.navigate(['drive/my-drive']),
         error: (err) => console.error("Authentication failed", err),
       });
     }

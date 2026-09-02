@@ -6,6 +6,7 @@ import { HomeComponent } from './features/home-component/home-component';
 import { RegisterComponent } from './features/register-component/register-component';
 import { OauthSuccessComponent } from './features/oauth-success-component/oauth-success-component';
 import { ProfileComponent } from './features/profile-component/profile-component';
+import { NotFoundComponent } from './features/not-found-component/not-found-component';
 
 export const routes: Routes = [
     {
@@ -28,7 +29,7 @@ export const routes: Routes = [
         canActivate: [loginGuard],
     },
     {
-        path: 'dashboard',
+        path: 'drive/my-drive',
         component: DashboardComponent,
         canActivate: [authGuard],
     },
@@ -36,5 +37,9 @@ export const routes: Routes = [
         path: 'profile',
         component: ProfileComponent,
         canActivate: [authGuard],
+    },
+    {
+        path: '**',
+        component: NotFoundComponent,
     },
 ];

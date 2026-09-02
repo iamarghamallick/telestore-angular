@@ -43,12 +43,24 @@ export class FolderService {
 
     updateFolder(
         id: string,
-        name: string
+        name: string,
+        parentFolderId?: string | null
     ): Observable<Folder> {
+
+        const body: {
+            name: string;
+            parentFolderId?: string | null;
+        } = {
+            name
+        };
+
+        if (parentFolderId !== undefined) {
+            body.parentFolderId = parentFolderId;
+        }
 
         return this.http.put<Folder>(
             `${this.baseUrl}/api/folder/${id}`,
-            { name }
+            body
         );
     }
 

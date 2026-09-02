@@ -1,498 +1,620 @@
-<div class="min-h-[calc(100vh-4rem)] bg-gray-50">
+<div class="min-h-[calc(100vh-4rem)] bg-slate-50" (click)="closeAllMenus()">
 
-    <!-- Header -->
-    <div class="border-b bg-white">
-        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+    <!-- Top bar: breadcrumbs + search + new button -->
+    <div class="sticky top-0 z-20 border-b border-slate-200 bg-white/95 backdrop-blur">
+        <div class="mx-auto max-w-6xl px-4 py-4 sm:px-6">
 
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">
-                    My Files
-                </h1>
+            <div class="flex flex-wrap items-center justify-between gap-3">
 
-                <p class="mt-1 text-sm text-gray-500">
-                    Upload and manage your files
-                </p>
-            </div>
+                <!-- Breadcrumbs -->
+                <nav class="flex min-w-0 items-center gap-1 text-sm">
 
-        </div>
-    </div>
-
-    <!-- Main -->
-    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-
-        <div class="max-w-2xl">
-
-            <!-- Upload Card -->
-            <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-
-                <div class="mb-6">
-
-                    <h2 class="text-lg font-semibold text-gray-900">
-                        Upload file
-                    </h2>
-
-                    <p class="mt-1 text-sm text-gray-500">
-                        Select a file and choose where you want to store it.
-                    </p>
-
-                </div>
-
-
-                <!-- File picker -->
-                <label
-                    class="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 text-center transition hover:border-blue-400 hover:bg-blue-50">
-
-                    <div class="mb-3 text-4xl">
-                        📁
-                    </div>
-
-                    <span class="text-sm font-medium text-gray-700">
-                        Choose a file
-                    </span>
-
-                    <span class="mt-1 text-xs text-gray-500">
-                        Click here to browse your computer
-                    </span>
-
-                    <input type="file" class="hidden" [disabled]="uploading()" (change)="onFileSelected($event)" />
-
-                </label>
-
-
-                <!-- Selected file -->
-                @if (selectedFile(); as file) {
-
-                <div class="mt-5 rounded-lg border bg-gray-50 p-4">
-
-                    <div class="flex items-center justify-between gap-4">
-
-                        <div class="min-w-0">
-
-                            <p class="truncate text-sm font-medium text-gray-900">
-                                {{ file.name }}
-                            </p>
-
-                            <p class="mt-1 text-xs text-gray-500">
-                                {{ file.size | number }} bytes
-                            </p>
-
-                        </div>
-
-                        @if (!uploading()) {
-
-                        <button type="button" (click)="removeSelectedFile()"
-                            class="shrink-0 text-sm font-medium text-red-600 hover:text-red-700">
-
-                            Remove
-
-                        </button>
-
-                        }
-
-                    </div>
-
-                </div>
-
-                }
-
-
-                <!-- Folder -->
-                <div class="mt-4">
-
-                    <div class="flex items-center justify-between">
-
-                        <label for="folder" class="block text-sm font-medium text-gray-700">
-
-                            Upload to
-
-                        </label>
-
-                        <button type="button" (click)="showCreateFolder.set(!showCreateFolder())"
-                            [disabled]="creatingFolder()"
-                            class="cursor-pointer text-sm font-medium text-blue-600 hover:text-blue-700">
-
-                            + New folder
-
-                        </button>
-
-                    </div>
-
-
-                    <select id="folder" [value]="selectedFolderId()" (change)="onFolderChange($event)"
-                        [disabled]="uploading() || loadingFolders()"
-                        class="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
-
-                        <option value="">
-                            Root
-                        </option>
-
-                        @for (folder of folders(); track folder.id) {
-
-                        <option [value]="folder.id">
-                            {{ folder.name }}
-                        </option>
-
-                        }
-
-                    </select>
-
-                </div>
-
-                <div class="mt-6"></div>
-
-                @if (!loadingFolders() && folders().length === 0) {
-
-                <div class="mt-2 rounded-lg bg-yellow-50 px-3 py-2">
-                    <p class="text-xs text-yellow-800">
-                        You don't have any folders yet.
-                    </p>
-                </div>
-
-                }
-
-                @if (folderError(); as error) {
-
-                <div class="mt-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2">
-
-                    <p class="text-xs text-red-700">
-                        {{ error }}
-                    </p>
-
-                </div>
-
-                }
-
-                <p class="mt-1.5 text-xs text-gray-500">
-                    Choose the folder where this file will be stored.
-                </p>
-
-            </div>
-
-            @if (showCreateFolder()) {
-
-            <div class="mt-3 rounded-lg border border-gray-200 bg-gray-50 p-3">
-
-                <label for="new-folder" class="block text-sm font-medium text-gray-700">
-
-                    Folder name
-
-                </label>
-
-
-                <div class="mt-2 flex gap-2">
-
-                    <input id="new-folder" type="text" [value]="newFolderName()"
-                        (input)="newFolderName.set($any($event.target).value)" (keyup.enter)="createFolder()"
-                        [disabled]="creatingFolder()" placeholder="e.g. Documents"
-                        class="min-w-0 flex-1 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
-
-
-                    <button type="button" (click)="createFolder()" [disabled]="creatingFolder()"
-                        class="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50">
-
-                        @if (creatingFolder()) {
-                        Creating...
-                        } @else {
-                        Create
-                        }
-
+                    <button type="button" (click)="goToRoot()"
+                        class="flex shrink-0 cursor-pointer items-center gap-1.5 rounded-md px-2 py-1 font-medium hover:bg-slate-100"
+                        [class.text-slate-900]="trail().length === 0" [class.text-slate-500]="trail().length > 0">
+                        <ng-icon name="heroHome" size="16"></ng-icon>
+                        My Drive
                     </button>
 
-                </div>
+                    @for (crumb of trail(); track crumb.id; let i = $index; let last = $last) {
+                    <ng-icon name="heroChevronRight" size="14" class="shrink-0 text-slate-300"></ng-icon>
 
-
-                @if (createFolderError(); as error) {
-
-                <p class="mt-2 text-xs text-red-600">
-                    {{ error }}
-                </p>
-
-                }
-
-
-                @if (createFolderSuccess()) {
-
-                <p class="mt-2 text-xs text-green-600">
-                    Folder created successfully.
-                </p>
-
-                }
-
-            </div>
-
-            }
-
-
-            <!-- Progress -->
-            @if (uploading()) {
-
-            <div class="mt-6">
-
-                <div class="mb-2 flex justify-between text-sm">
-
-                    <span class="font-medium text-gray-700">
-                        Uploading...
+                    @if (last) {
+                    <span class="truncate rounded-md px-2 py-1 font-medium text-slate-900">
+                        {{ crumb.name }}
                     </span>
-
-                    <span class="text-gray-500">
-                        {{ uploadProgress() }}%
-                    </span>
-
-                </div>
-
-                <div class="h-2 overflow-hidden rounded-full bg-gray-200">
-
-                    <div class="h-full rounded-full bg-blue-600 transition-all duration-300"
-                        [style.width.%]="uploadProgress()">
-                    </div>
-
-                </div>
-
-            </div>
-
-            }
-
-
-            <!-- Success -->
-            @if (uploadSuccess()) {
-
-            <div class="mt-5 rounded-lg border border-green-200 bg-green-50 px-4 py-3">
-
-                <p class="text-sm font-medium text-green-800">
-                    File uploaded successfully.
-                </p>
-
-            </div>
-
-            }
-
-
-            <!-- Error -->
-            @if (uploadError(); as error) {
-
-            <div class="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
-
-                <p class="text-sm font-medium text-red-800">
-                    {{ error }}
-                </p>
-
-            </div>
-
-            }
-
-
-            <!-- Upload button -->
-            <button type="button" (click)="uploadFile()" [disabled]="uploading() || !selectedFile()"
-                class="mt-6 w-full cursor-pointer rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50">
-
-                @if (uploading()) {
-                Uploading...
-                } @else {
-                Upload file
-                }
-
-            </button>
-
-        </div>
-
-        <!-- Files -->
-        <div class="mt-8">
-
-            <!-- Header -->
-            <div class="mb-4 flex items-center justify-between">
-
-                <div>
-
-                    <h2 class="text-lg font-semibold text-gray-900">
-                        Your files
-                    </h2>
-
-                    <p class="mt-1 text-sm text-gray-500">
-                        {{ totalElements() }} files
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <!-- Loading -->
-            @if (loadingMedia()) {
-
-            <div class="rounded-xl border border-gray-200 bg-white p-8 text-center">
-
-                <div class="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-blue-600">
-                </div>
-
-                <p class="mt-3 text-sm text-gray-500">
-                    Loading files...
-                </p>
-
-            </div>
-
-            }
-
-
-            <!-- Error -->
-            @else if (mediaError(); as error) {
-
-            <div class="rounded-xl border border-red-200 bg-red-50 p-4">
-
-                <p class="text-sm text-red-700">
-                    {{ error }}
-                </p>
-
-            </div>
-
-            }
-
-
-            <!-- Empty -->
-            @else if (media().length === 0) {
-
-            <div class="rounded-xl border border-gray-200 bg-white px-6 py-12 text-center">
-
-                <div class="text-4xl">
-                    📂
-                </div>
-
-                <h3 class="mt-3 text-sm font-semibold text-gray-900">
-                    No files found
-                </h3>
-
-                <p class="mt-1 text-sm text-gray-500">
-                    Upload your first file to get started.
-                </p>
-
-            </div>
-
-            }
-
-
-            <!-- File list -->
-            @else {
-
-            <div class="overflow-hidden rounded-xl border border-gray-200 bg-white">
-
-                <div class="divide-y divide-gray-100">
-
-                    @for (file of media(); track file.id) {
-
-                    <div class="flex items-center gap-4 px-5 py-4 hover:bg-gray-50">
-
-                        <!-- Icon -->
-                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-lg">
-
-                            @switch (file.mediaType) {
-
-                            @case ('IMAGE') {
-                            🖼️
-                            }
-
-                            @case ('VIDEO') {
-                            🎬
-                            }
-
-                            @case ('AUDIO') {
-                            🎵
-                            }
-
-                            @case ('DOCUMENT') {
-                            📄
-                            }
-
-                            @default {
-                            📁
-                            }
-
-                            }
-
-                        </div>
-
-
-                        <!-- Name -->
-                        <div class="min-w-0 flex-1">
-
-                            <p class="truncate text-sm font-medium text-gray-900">
-                                {{ file.filename }}
-                            </p>
-
-                            <p class="mt-1 text-xs text-gray-500">
-
-                                {{ file.extension || file.mediaType }}
-
-                                ·
-
-                                {{ file.size | number }} bytes
-                            </p>
-
-                        </div>
-
-
-                        <!-- Date -->
-                        <div class="hidden text-right sm:block">
-                            <p class="text-xs text-gray-500">
-                                {{ file.createdAt | date:'mediumDate' }}
-                            </p>
-                        </div>
-
-                        <!-- Actions -->
-                        <button type="button" (click)="downloadFile(file)" [disabled]="downloadingFileId() === file.id"
-                            class="cursor-pointer rounded-lg p-2 text-gray-400 hover:bg-blue-50 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
-                            title="Download">
-
-                            @if (downloadingFileId() === file.id) {
-
-                            <span
-                                class="block h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600">
-                            </span>
-
-                            } @else {
-
-                            <ng-icon name="heroArrowDownTray" size="20">
-                            </ng-icon>
-
-                            }
+                    } @else {
+                    <button type="button" (click)="goToBreadcrumb(i)"
+                        class="max-w-[10rem] shrink-0 cursor-pointer truncate rounded-md px-2 py-1 font-medium text-slate-500 hover:bg-slate-100">
+                        {{ crumb.name }}
+                    </button>
+                    }
+                    }
+
+                </nav>
+
+                <!-- New button -->
+                <div class="relative shrink-0" (click)="$event.stopPropagation()">
+
+                    <button type="button" (click)="toggleNewMenu()"
+                        class="flex cursor-pointer items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700">
+                        <ng-icon name="heroPlus" size="16"></ng-icon>
+                        New
+                    </button>
+
+                    @if (showNewMenu()) {
+                    <div
+                        class="absolute right-0 z-30 mt-2 w-48 overflow-hidden rounded-lg border border-slate-200 bg-white py-1 shadow-lg">
+
+                        <button type="button" (click)="openCreateFolderFromMenu()"
+                            class="flex w-full cursor-pointer items-center gap-2.5 px-3.5 py-2.5 text-left text-sm text-slate-700 hover:bg-slate-50">
+                            <ng-icon name="heroFolderPlus" size="17" class="text-slate-400"></ng-icon>
+                            New folder
+                        </button>
+
+                        <button type="button" (click)="openUploadFromMenu()"
+                            class="flex w-full cursor-pointer items-center gap-2.5 px-3.5 py-2.5 text-left text-sm text-slate-700 hover:bg-slate-50">
+                            <ng-icon name="heroArrowUpTray" size="17" class="text-slate-400"></ng-icon>
+                            Upload file
                         </button>
 
                     </div>
-
                     }
 
                 </div>
 
             </div>
 
-            <!-- Pagination -->
-            @if (totalPages() > 1) {
+            <!-- Search / filter / sort -->
+            <div class="mt-4 flex flex-wrap items-center gap-2">
 
-            <div class="mt-4 flex items-center justify-between">
+                <div class="relative min-w-[220px] flex-1">
+                    <ng-icon name="heroMagnifyingGlass" size="16"
+                        class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></ng-icon>
+                    <input type="text" placeholder="Search files" [value]="searchQuery()"
+                        (input)="onSearchChange($any($event.target).value)"
+                        class="w-full rounded-lg border border-slate-300 bg-white py-2 pl-9 pr-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100" />
+                </div>
 
-                <button type="button" (click)="previousPage()" [disabled]="currentPage() === 0"
-                    class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40">
+                <select [value]="typeFilter()" (change)="onTypeFilterChange($any($event.target).value)"
+                    class="cursor-pointer rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+                    <option value="">All types</option>
+                    @for (type of mediaTypeOptions; track type) {
+                    <option [value]="type">{{ type }}</option>
+                    }
+                </select>
 
-                    Previous
+                <select [value]="sortBy()" (change)="onSortByChange($any($event.target).value)"
+                    class="cursor-pointer rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+                    @for (opt of sortOptions; track opt.value) {
+                    <option [value]="opt.value">Sort: {{ opt.label }}</option>
+                    }
+                </select>
 
+                <button type="button" (click)="toggleSortDir()"
+                    [title]="sortDir() === 'asc' ? 'Ascending' : 'Descending'"
+                    class="flex cursor-pointer items-center gap-1 rounded-lg border border-slate-300 bg-white px-2.5 py-2 text-slate-500 hover:bg-slate-50">
+                    <ng-icon name="heroArrowsRightLeft" size="16"
+                        [style.transform]="sortDir() === 'asc' ? 'rotate(90deg)' : 'rotate(-90deg)'"></ng-icon>
                 </button>
 
+                @if (hasActiveFilters()) {
+                <button type="button" (click)="clearFilters()"
+                    class="flex cursor-pointer items-center gap-1 rounded-lg px-2.5 py-2 text-sm font-medium text-indigo-600 hover:bg-indigo-50">
+                    <ng-icon name="heroXMark" size="15"></ng-icon>
+                    Clear
+                </button>
+                }
 
-                <span class="text-sm text-gray-500">
-
-                    Page {{ currentPage() + 1 }}
-                    of
-                    {{ totalPages() }}
-
-                </span>
-
-
-                <button type="button" (click)="nextPage()" [disabled]="currentPage() >= totalPages() - 1"
-                    class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40">
-
-                    Next
-
+                <button type="button" (click)="loadCurrentFolder()"
+                    class="ml-auto flex cursor-pointer items-center gap-1 rounded-lg px-2.5 py-2 text-sm text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+                    title="Refresh">
+                    <ng-icon name="heroArrowPath" size="16"></ng-icon>
                 </button>
 
             </div>
+
+        </div>
+    </div>
+
+    <!-- Main -->
+    <main class="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+
+        <!-- Folders -->
+        <section class="mb-8">
+
+            <h2 class="mb-3 text-sm font-semibold text-slate-500">Folders</h2>
+
+            @if (loadingFolders()) {
+            <div class="flex items-center gap-2 py-4 text-sm text-slate-400">
+                <span class="h-4 w-4 animate-spin rounded-full border-2 border-slate-200 border-t-indigo-500"></span>
+                Loading folders...
+            </div>
+            } @else if (folderError(); as error) {
+            <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                {{ error }}
+            </div>
+            } @else if (folders().length > 0) {
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+
+                @for (folder of folders(); track folder.id) {
+                <div (click)="openFolder(folder)"
+                    class="group relative flex cursor-pointer items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3.5 hover:border-indigo-300 hover:shadow-sm">
+
+                    <div
+                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-500">
+                        <ng-icon name="heroFolder" size="20"></ng-icon>
+                    </div>
+
+                    <p class="min-w-0 flex-1 truncate text-sm font-medium text-slate-800">
+                        {{ folder.name }}
+                    </p>
+
+                    <div class="relative shrink-0" (click)="$event.stopPropagation()">
+
+                        <button type="button" (click)="toggleItemMenu('folder-' + folder.id, $event)"
+                            class="cursor-pointer rounded-md p-1.5 text-slate-300 opacity-100 hover:bg-slate-100 hover:text-slate-600 group-hover:opacity-100"
+                            [class.opacity-100]="openMenuId() === 'folder-' + folder.id">
+                            <ng-icon name="heroEllipsisVertical" size="18"></ng-icon>
+                        </button>
+
+                        @if (openMenuId() === 'folder-' + folder.id) {
+                        <div
+                            class="absolute right-0 z-30 mt-1 w-40 overflow-hidden rounded-lg border border-slate-200 bg-white py-1 shadow-lg">
+
+                            <button type="button" (click)="openRenameFolder(folder)"
+                                class="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50">
+                                <ng-icon name="heroPencilSquare" size="16" class="text-slate-400"></ng-icon>
+                                Rename
+                            </button>
+
+                            <button type="button" (click)="openMoveFolder(folder)"
+                                class="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50">
+                                <ng-icon name="heroArrowsRightLeft" size="16" class="text-slate-400"></ng-icon>
+                                Move to...
+                            </button>
+
+                            <button type="button" (click)="openDeleteFolder(folder)"
+                                class="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm text-red-600 hover:bg-red-50">
+                                <ng-icon name="heroTrash" size="16"></ng-icon>
+                                Delete
+                            </button>
+
+                        </div>
+                        }
+
+                    </div>
+
+                </div>
+                }
+
+            </div>
+            } @else {
+            <p class="py-2 text-sm text-slate-400">No folders here yet.</p>
+            }
+
+        </section>
+
+        <!-- Files -->
+        <section>
+
+            <div class="mb-3 flex items-baseline justify-between">
+                <h2 class="text-sm font-semibold text-slate-500">Files</h2>
+                <span class="text-xs text-slate-400">{{ totalElements() }} total</span>
+            </div>
+
+            @if (loadingMedia()) {
+            <div class="rounded-xl border border-slate-200 bg-white p-10 text-center">
+                <div class="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-indigo-600">
+                </div>
+                <p class="mt-3 text-sm text-slate-400">Loading files...</p>
+            </div>
+            } @else if (mediaError(); as error) {
+            <div class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+                {{ error }}
+            </div>
+            } @else if (media().length === 0 && folders().length === 0) {
+            <div class="rounded-xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center">
+                <ng-icon name="heroFolder" size="32" class="mx-auto text-slate-300"></ng-icon>
+                <h3 class="mt-3 text-sm font-semibold text-slate-800">This folder is empty</h3>
+                <p class="mt-1 text-sm text-slate-400">Upload a file or create a folder to get started.</p>
+            </div>
+            } @else if (media().length === 0) {
+            <div class="rounded-xl border border-slate-200 bg-white px-6 py-12 text-center">
+                <ng-icon name="heroMagnifyingGlass" size="28" class="mx-auto text-slate-300"></ng-icon>
+                <h3 class="mt-3 text-sm font-semibold text-slate-800">No files match your search</h3>
+                <p class="mt-1 text-sm text-slate-400">Try a different search term or clear your filters.</p>
+            </div>
+            } @else {
+
+            <div class="overflow-hidden rounded-xl border border-slate-200 bg-white">
+                <div class="divide-y divide-slate-100">
+
+                    @for (file of media(); track file.id) {
+                    <div class="group flex items-center gap-4 px-4 py-3.5 hover:bg-slate-50">
+
+                        <div
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
+                            <ng-icon [name]="iconFor(file.mediaType)" size="19"></ng-icon>
+                        </div>
+
+                        <div class="min-w-0 flex-1">
+                            <p class="truncate text-sm font-medium text-slate-800">{{ file.filename }}</p>
+                            <p class="mt-0.5 text-xs text-slate-400">
+                                {{ file.extension || file.mediaType }} · {{ file.size | number }} bytes
+                            </p>
+                        </div>
+
+                        <p class="hidden shrink-0 text-xs text-slate-400 sm:block">
+                            {{ file.createdAt | date:'mediumDate' }}
+                        </p>
+
+                        <button type="button" (click)="downloadFile(file)" [disabled]="downloadingFileId() === file.id"
+                            class="shrink-0 cursor-pointer rounded-lg p-2 text-slate-400 hover:bg-indigo-50 hover:text-indigo-600 disabled:cursor-not-allowed disabled:opacity-50"
+                            title="Download">
+                            @if (downloadingFileId() === file.id) {
+                            <span
+                                class="block h-4.5 w-4.5 animate-spin rounded-full border-2 border-slate-300 border-t-indigo-600"></span>
+                            } @else {
+                            <ng-icon name="heroArrowDownTray" size="18"></ng-icon>
+                            }
+                        </button>
+
+                        <div class="relative shrink-0" (click)="$event.stopPropagation()">
+
+                            <button type="button" (click)="toggleItemMenu('media-' + file.id, $event)"
+                                class="cursor-pointer rounded-lg p-2 text-slate-300 opacity-100 hover:bg-slate-100 hover:text-slate-600 group-hover:opacity-100"
+                                [class.opacity-100]="openMenuId() === 'media-' + file.id">
+                                <ng-icon name="heroEllipsisVertical" size="18"></ng-icon>
+                            </button>
+
+                            @if (openMenuId() === 'media-' + file.id) {
+                            <div
+                                class="absolute right-0 z-30 mt-1 w-40 overflow-hidden rounded-lg border border-slate-200 bg-white py-1 shadow-lg">
+
+                                <button type="button" (click)="openRenameMedia(file)"
+                                    class="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50">
+                                    <ng-icon name="heroPencilSquare" size="16" class="text-slate-400"></ng-icon>
+                                    Rename
+                                </button>
+
+                                <button type="button" (click)="openMove(file)"
+                                    class="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50">
+                                    <ng-icon name="heroArrowsRightLeft" size="16" class="text-slate-400"></ng-icon>
+                                    Move to...
+                                </button>
+
+                                <button type="button" (click)="openDeleteMedia(file)"
+                                    class="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm text-red-600 hover:bg-red-50">
+                                    <ng-icon name="heroTrash" size="16"></ng-icon>
+                                    Delete
+                                </button>
+
+                            </div>
+                            }
+
+                        </div>
+
+                    </div>
+                    }
+
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            @if (totalPages() > 1) {
+            <div class="mt-4 flex items-center justify-between">
+
+                <button type="button" (click)="previousPage()" [disabled]="currentPage() === 0"
+                    class="cursor-pointer rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40">
+                    Previous
+                </button>
+
+                <span class="text-sm text-slate-500">
+                    Page {{ currentPage() + 1 }} of {{ totalPages() }}
+                </span>
+
+                <button type="button" (click)="nextPage()" [disabled]="currentPage() >= totalPages() - 1"
+                    class="cursor-pointer rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40">
+                    Next
+                </button>
+
+            </div>
+            }
+
+            }
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- ===================== Create folder modal ===================== -->
+@if (showCreateFolder()) {
+<div class="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/40 px-4" (click)="closeCreateFolder()">
+    <div class="w-full max-w-sm rounded-xl bg-white p-5 shadow-xl" (click)="$event.stopPropagation()">
+
+        <div class="mb-4 flex items-center justify-between">
+            <h3 class="text-base font-semibold text-slate-900">New folder</h3>
+            <button type="button" (click)="closeCreateFolder()" [disabled]="creatingFolder()"
+                class="cursor-pointer rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600">
+                <ng-icon name="heroXMark" size="18"></ng-icon>
+            </button>
+        </div>
+
+        <label for="new-folder-name" class="block text-sm font-medium text-slate-700">Folder name</label>
+        <input id="new-folder-name" type="text" [value]="newFolderName()"
+            (input)="newFolderName.set($any($event.target).value)" (keyup.enter)="submitCreateFolder()"
+            [disabled]="creatingFolder()" placeholder="e.g. Invoices" autofocus
+            class="mt-2 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100" />
+
+        @if (createFolderError(); as error) {
+        <p class="mt-2 text-xs text-red-600">{{ error }}</p>
+        }
+
+        <div class="mt-5 flex justify-end gap-2">
+            <button type="button" (click)="closeCreateFolder()" [disabled]="creatingFolder()"
+                class="cursor-pointer rounded-lg px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100">
+                Cancel
+            </button>
+            <button type="button" (click)="submitCreateFolder()" [disabled]="creatingFolder()"
+                class="cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50">
+                @if (creatingFolder()) { Creating... } @else { Create }
+            </button>
+        </div>
+
+    </div>
+</div>
+}
+
+
+<!-- ===================== Upload modal ===================== -->
+@if (showUpload()) {
+<div class="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/40 px-4" (click)="closeUpload()">
+    <div class="w-full max-w-md rounded-xl bg-white p-5 shadow-xl" (click)="$event.stopPropagation()">
+
+        <div class="mb-4 flex items-center justify-between">
+            <h3 class="text-base font-semibold text-slate-900">Upload file</h3>
+            <button type="button" (click)="closeUpload()" [disabled]="uploading()"
+                class="cursor-pointer rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600">
+                <ng-icon name="heroXMark" size="18"></ng-icon>
+            </button>
+        </div>
+
+        <p class="mb-3 text-xs text-slate-400">
+            Uploading to {{ currentFolder()?.name || 'My Drive' }}
+        </p>
+
+        @if (!selectedFile()) {
+        <label
+            class="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-6 py-10 text-center transition hover:border-indigo-400 hover:bg-indigo-50">
+            <ng-icon name="heroArrowUpTray" size="28" class="mb-2 text-slate-400"></ng-icon>
+            <span class="text-sm font-medium text-slate-700">Choose a file</span>
+            <span class="mt-1 text-xs text-slate-400">Click here to browse your computer</span>
+            <input type="file" class="hidden" [disabled]="uploading()" (change)="onFileSelected($event)" />
+        </label>
+        } @else {
+        <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+            <div class="flex items-center justify-between gap-4">
+                <div class="min-w-0">
+                    <p class="truncate text-sm font-medium text-slate-900">{{ selectedFile()!.name }}</p>
+                    <p class="mt-1 text-xs text-slate-500">{{ selectedFile()!.size | number }} bytes</p>
+                </div>
+                @if (!uploading()) {
+                <button type="button" (click)="removeSelectedFile()"
+                    class="shrink-0 cursor-pointer text-sm font-medium text-red-600 hover:text-red-700">
+                    Remove
+                </button>
+                }
+            </div>
+        </div>
+        }
+
+        @if (uploading()) {
+        <div class="mt-4">
+            <div class="mb-2 flex justify-between text-sm">
+                <span class="font-medium text-slate-700">Uploading...</span>
+                <span class="text-slate-500">{{ uploadProgress() }}%</span>
+            </div>
+            <div class="h-2 overflow-hidden rounded-full bg-slate-200">
+                <div class="h-full rounded-full bg-indigo-600 transition-all duration-300"
+                    [style.width.%]="uploadProgress()"></div>
+            </div>
+        </div>
+        }
+
+        @if (uploadError(); as error) {
+        <p class="mt-3 text-xs text-red-600">{{ error }}</p>
+        }
+
+        <div class="mt-5 flex justify-end gap-2">
+            <button type="button" (click)="closeUpload()" [disabled]="uploading()"
+                class="cursor-pointer rounded-lg px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100">
+                Cancel
+            </button>
+            <button type="button" (click)="submitUpload()" [disabled]="uploading() || !selectedFile()"
+                class="cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50">
+                @if (uploading()) { Uploading... } @else { Upload }
+            </button>
+        </div>
+
+    </div>
+</div>
+}
+
+
+<!-- ===================== Rename modal (folder or file) ===================== -->
+@if (renameTarget(); as target) {
+<div class="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/40 px-4" (click)="closeRename()">
+    <div class="w-full max-w-sm rounded-xl bg-white p-5 shadow-xl" (click)="$event.stopPropagation()">
+
+        <div class="mb-4 flex items-center justify-between">
+            <h3 class="text-base font-semibold text-slate-900">
+                Rename {{ target.kind === 'folder' ? 'folder' : 'file' }}
+            </h3>
+            <button type="button" (click)="closeRename()" [disabled]="renaming()"
+                class="cursor-pointer rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600">
+                <ng-icon name="heroXMark" size="18"></ng-icon>
+            </button>
+        </div>
+
+        <label for="rename-value" class="block text-sm font-medium text-slate-700">Name</label>
+        <input id="rename-value" type="text" [value]="renameValue()"
+            (input)="renameValue.set($any($event.target).value)" (keyup.enter)="submitRename()" [disabled]="renaming()"
+            autofocus
+            class="mt-2 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100" />
+
+        @if (renameError(); as error) {
+        <p class="mt-2 text-xs text-red-600">{{ error }}</p>
+        }
+
+        <div class="mt-5 flex justify-end gap-2">
+            <button type="button" (click)="closeRename()" [disabled]="renaming()"
+                class="cursor-pointer rounded-lg px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100">
+                Cancel
+            </button>
+            <button type="button" (click)="submitRename()" [disabled]="renaming()"
+                class="cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50">
+                @if (renaming()) { Saving... } @else { Save }
+            </button>
+        </div>
+
+    </div>
+</div>
+}
+
+
+<!-- ===================== Move modal (files only) ===================== -->
+@if (moveTarget(); as file) {
+<div class="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/40 px-4" (click)="closeMove()">
+    <div class="flex w-full max-w-sm flex-col rounded-xl bg-white p-5 shadow-xl" (click)="$event.stopPropagation()">
+
+        <div class="mb-1 flex items-center justify-between">
+            <h3 class="text-base font-semibold text-slate-900">Move "{{ file.filename }}"</h3>
+            <button type="button" (click)="closeMove()" [disabled]="moving()"
+                class="cursor-pointer rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600">
+                <ng-icon name="heroXMark" size="18"></ng-icon>
+            </button>
+        </div>
+
+        <p class="mb-3 text-xs text-slate-400">Choose a destination folder.</p>
+
+        <div class="max-h-64 overflow-y-auto rounded-lg border border-slate-200">
+
+            <button type="button" (click)="setMoveDestination(null)"
+                class="flex w-full cursor-pointer items-center gap-2.5 border-b border-slate-100 px-3 py-2.5 text-left text-sm hover:bg-slate-50"
+                [class.bg-indigo-50]="moveDestination() === null">
+                <ng-icon name="heroHome" size="16" class="text-slate-400"></ng-icon>
+                <span class="flex-1 text-slate-700">My Drive (root)</span>
+                @if (moveDestination() === null) {
+                <span class="h-2 w-2 rounded-full bg-indigo-600"></span>
+                }
+            </button>
+
+            @for (folder of allFolders(); track folder.id) {
+            <button type="button" (click)="setMoveDestination(folder.id)"
+                class="flex w-full cursor-pointer items-center gap-2.5 border-b border-slate-100 px-3 py-2.5 text-left text-sm last:border-b-0 hover:bg-slate-50"
+                [class.bg-indigo-50]="moveDestination() === folder.id">
+                <ng-icon name="heroFolder" size="16" class="text-amber-400"></ng-icon>
+                <span class="flex-1 truncate text-slate-700">{{ folder.name }}</span>
+                @if (moveDestination() === folder.id) {
+                <span class="h-2 w-2 shrink-0 rounded-full bg-indigo-600"></span>
+                }
+            </button>
+            }
+
+        </div>
+
+        @if (moveError(); as error) {
+        <p class="mt-3 text-xs text-red-600">{{ error }}</p>
+        }
+
+        <div class="mt-5 flex justify-end gap-2">
+            <button type="button" (click)="closeMove()" [disabled]="moving()"
+                class="cursor-pointer rounded-lg px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100">
+                Cancel
+            </button>
+            <button type="button" (click)="submitMove()" [disabled]="moving()"
+                class="cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50">
+                @if (moving()) { Moving... } @else { Move }
+            </button>
+        </div>
+
+    </div>
+</div>
+}
+
+
+<!-- ===================== Move folder modal ===================== -->
+@if (moveFolderTarget(); as folder) {
+<div class="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/40 px-4" (click)="closeMoveFolder()">
+
+    <div class="flex w-full max-w-sm flex-col rounded-xl bg-white p-5 shadow-xl" (click)="$event.stopPropagation()">
+
+        <!-- Header -->
+        <div class="mb-1 flex items-center justify-between">
+
+            <h3 class="text-base font-semibold text-slate-900">
+                Move "{{ folder.name }}"
+            </h3>
+
+            <button type="button" (click)="closeMoveFolder()" [disabled]="moving()"
+                class="cursor-pointer rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600">
+
+                <ng-icon name="heroXMark" size="18"></ng-icon>
+
+            </button>
+
+        </div>
+
+        <p class="mb-3 text-xs text-slate-400">
+            Choose a destination folder.
+        </p>
+
+        <!-- Destination list -->
+        <div class="max-h-64 overflow-y-auto rounded-lg border border-slate-200">
+
+            <!-- Root -->
+            <button type="button" (click)="setMoveFolderDestination(null)"
+                class="flex w-full cursor-pointer items-center gap-2.5 border-b border-slate-100 px-3 py-2.5 text-left text-sm hover:bg-slate-50"
+                [class.bg-indigo-50]="moveFolderDestination() === null">
+
+                <ng-icon name="heroHome" size="16" class="text-slate-400">
+                </ng-icon>
+
+                <span class="flex-1 text-slate-700">
+                    My Drive (root)
+                </span>
+
+                @if (moveFolderDestination() === null) {
+                <span class="h-2 w-2 rounded-full bg-indigo-600"></span>
+                }
+
+            </button>
+
+            <!-- Folders -->
+            @for (destination of allFolders(); track destination.id) {
+
+            @if (destination.id !== folder.id) {
+
+            <button type="button" (click)="setMoveFolderDestination(destination.id)"
+                class="flex w-full cursor-pointer items-center gap-2.5 border-b border-slate-100 px-3 py-2.5 text-left text-sm last:border-b-0 hover:bg-slate-50"
+                [class.bg-indigo-50]="moveFolderDestination() === destination.id">
+
+                <ng-icon name="heroFolder" size="16" class="text-amber-400">
+                </ng-icon>
+
+                <span class="flex-1 truncate text-slate-700">
+                    {{ destination.name }}
+                </span>
+
+                @if (moveFolderDestination() === destination.id) {
+                <span class="h-2 w-2 shrink-0 rounded-full bg-indigo-600"></span>
+                }
+
+            </button>
 
             }
 
@@ -500,5 +622,77 @@
 
         </div>
 
-    </main>
+        @if (moveError(); as error) {
+        <p class="mt-3 text-xs text-red-600">
+            {{ error }}
+        </p>
+        }
+
+        <!-- Buttons -->
+        <div class="mt-5 flex justify-end gap-2">
+
+            <button type="button" (click)="closeMoveFolder()" [disabled]="moving()"
+                class="cursor-pointer rounded-lg px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100">
+                Cancel
+            </button>
+
+            <button type="button" (click)="submitMoveFolder()" [disabled]="moving()"
+                class="cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50">
+
+                @if (moving()) {
+                Moving...
+                } @else {
+                Move
+                }
+
+            </button>
+
+        </div>
+
+    </div>
+
 </div>
+}
+
+
+<!-- ===================== Delete confirmation modal ===================== -->
+@if (deleteTarget(); as target) {
+<div class="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/40 px-4" (click)="closeDelete()">
+    <div class="w-full max-w-sm rounded-xl bg-white p-5 shadow-xl" (click)="$event.stopPropagation()">
+
+        <div class="flex items-start gap-3">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-50 text-red-500">
+                <ng-icon name="heroTrash" size="19"></ng-icon>
+            </div>
+            <div class="min-w-0">
+                <h3 class="text-base font-semibold text-slate-900">
+                    Delete {{ target.kind === 'folder' ? 'folder' : 'file' }}?
+                </h3>
+                <p class="mt-1 text-sm text-slate-500">
+                    @if (target.kind === 'folder') {
+                    "{{ target.data.name }}" and everything inside it will be permanently deleted.
+                    } @else {
+                    "{{ target.data.filename }}" will be permanently deleted.
+                    }
+                </p>
+            </div>
+        </div>
+
+        @if (deleteError(); as error) {
+        <p class="mt-3 text-xs text-red-600">{{ error }}</p>
+        }
+
+        <div class="mt-5 flex justify-end gap-2">
+            <button type="button" (click)="closeDelete()" [disabled]="deleting()"
+                class="cursor-pointer rounded-lg px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100">
+                Cancel
+            </button>
+            <button type="button" (click)="confirmDelete()" [disabled]="deleting()"
+                class="cursor-pointer rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50">
+                @if (deleting()) { Deleting... } @else { Delete }
+            </button>
+        </div>
+
+    </div>
+</div>
+}

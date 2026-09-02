@@ -1,106 +1,163 @@
-<nav class="border-b bg-white">
+<nav class="border-b border-slate-200 bg-white/95 backdrop-blur">
     <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
+
         <!-- Logo -->
-        <a routerLink="/" class="text-xl font-bold text-gray-900">
-            TeleStore
+        <a routerLink="/" class="flex items-center gap-2.5">
+
+            <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm">
+                <ng-icon name="heroCloudArrowUp" size="20">
+                </ng-icon>
+            </div>
+
+            <span class="text-xl font-bold tracking-tight text-slate-900">
+                TeleStore
+            </span>
+
         </a>
+
 
         <!-- Desktop Navigation -->
         @if (isLoggedIn()) {
+
         <div class="hidden items-center gap-6 md:flex">
-            <a routerLink="/dashboard" routerLinkActive="text-blue-600"
-                class="text-sm font-medium text-gray-600 hover:text-blue-600">
-                Dashboard
+
+            <a routerLink="/drive/my-drive" routerLinkActive="text-blue-600"
+                class="flex items-center gap-1.5 text-sm font-medium text-slate-600 transition hover:text-blue-600">
+
+                <ng-icon name="heroHome" size="16">
+                </ng-icon>
+
+                My Drive
             </a>
-            <a routerLink="/files" routerLinkActive="text-blue-600"
-                class="text-sm font-medium text-gray-600 hover:text-blue-600">
-                Files
-            </a>
-            <a routerLink="/folders" routerLinkActive="text-blue-600"
-                class="text-sm font-medium text-gray-600 hover:text-blue-600">
-                Folders
-            </a>
-            <a routerLink="/upload"
-                class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-                Upload
-            </a>
-            <div class="flex items-center gap-3 border-l pl-6">
+
+
+            <div class="flex items-center gap-3 border-l border-slate-200 pl-6">
+
                 <a routerLink="/profile" routerLinkActive="text-blue-600"
-                    class="text-sm text-gray-700 hover:text-blue-600">
+                    class="flex items-center gap-1.5 text-sm font-medium text-slate-600 transition hover:text-blue-600">
+
+                    <ng-icon name="heroUserCircle" size="16">
+                    </ng-icon>
+
                     Profile
                 </a>
+
+
                 <button type="button" (click)="logout()"
-                    class="cursor-pointer rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700">
+                    class="cursor-pointer rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700">
+
                     Logout
                 </button>
+
             </div>
+
         </div>
+
         } @else {
+
+        <!-- Public Navigation -->
         <div class="hidden items-center gap-3 md:flex">
-            <a routerLink="/login" class="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100">
-                Sign in
+
+            <a routerLink="/login"
+                class="rounded-lg px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+
+                Login
             </a>
+
             <a routerLink="/register"
-                class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-                Register
+                class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 hover:shadow">
+
+                Get started
             </a>
+
         </div>
+
         }
+
 
         <!-- Mobile Menu Button -->
         <button type="button" (click)="toggleMenu()"
-            class="cursor-pointer rounded-lg p-2 text-gray-600 hover:bg-gray-100 md:hidden"
+            class="cursor-pointer rounded-lg p-2 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 md:hidden"
             aria-label="Toggle navigation menu">
+
             @if (menuOpen) {
-            <ng-icon name="heroXMark" size="24"></ng-icon>
+
+            <ng-icon name="heroXMark" size="24">
+            </ng-icon>
+
             } @else {
-            <ng-icon name="heroBars3" size="24"></ng-icon>
+
+            <ng-icon name="heroBars3" size="24">
+            </ng-icon>
+
             }
+
         </button>
+
     </div>
+
 
     <!-- Mobile Navigation -->
     @if (menuOpen) {
-    <div class="border-t bg-white px-4 py-4 md:hidden">
+
+    <div class="border-t border-slate-200 bg-white px-4 py-4 md:hidden">
+
         @if (isLoggedIn()) {
+
         <div class="flex flex-col gap-2">
-            <a routerLink="/dashboard" (click)="closeMenu()"
-                class="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100">
-                Dashboard
+
+            <a routerLink="/drive/my-drive" (click)="closeMenu()"
+                class="flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+
+                <ng-icon name="heroHome" size="17">
+                </ng-icon>
+
+                My Drive
             </a>
-            <a routerLink="/files" (click)="closeMenu()"
-                class="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100">
-                Files
-            </a>
-            <a routerLink="/folders" (click)="closeMenu()"
-                class="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100">
-                Folders
-            </a>
-            <a routerLink="/upload" (click)="closeMenu()"
-                class="rounded-lg bg-blue-600 px-4 py-3 text-center text-sm font-medium text-white hover:bg-blue-700">
-                Upload
-            </a>
+
+
             <a routerLink="/profile" (click)="closeMenu()"
-                class="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100">
+                class="flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+
+                <ng-icon name="heroUserCircle" size="17">
+                </ng-icon>
+
                 Profile
             </a>
+
+
             <button type="button" (click)="logout(); closeMenu()"
-                class="cursor-pointer rounded-lg bg-red-600 px-4 py-3 text-sm font-medium text-white hover:bg-red-700">
+                class="cursor-pointer rounded-lg bg-red-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-red-700">
+
                 Logout
             </button>
+
         </div>
+
         } @else {
+
         <div class="flex flex-col gap-2">
+
             <a routerLink="/login" (click)="closeMenu()"
-                class="rounded-lg px-4 py-3 text-center text-sm font-medium text-gray-700 hover:bg-gray-100">
-                Sign in
+                class="rounded-lg px-4 py-3 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-100">
+
+                Login
             </a>
+
+
             <a routerLink="/register" (click)="closeMenu()"
-                class="rounded-lg bg-blue-600 px-4 py-3 text-center text-sm font-medium text-white hover:bg-blue-700">
-                Register
+                class="rounded-lg bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700">
+
+                Get started
             </a>
+
         </div>
+
         }
+
     </div>
+
     }
+
+
 </nav>
