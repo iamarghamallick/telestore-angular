@@ -8,6 +8,7 @@ import { environment } from '../../../environments/environment';
 export class AuthService {
     private http = inject(HttpClient);
     private readonly TOKEN_KEY = "auth-token";
+    private readonly REFRESH_TOKEN_KEY = "refresh-token";
     private baseUrl = environment.apiBaseUrl;
 
     private authenticated = signal(
@@ -17,8 +18,9 @@ export class AuthService {
     readonly isLoggedIn = this.authenticated.asReadonly();
     readonly googleOAuth2Url = signal<string>(`${this.baseUrl}/oauth2/authorization/google`);
 
-    setToken(token: string): void {
+    setToken(token: string, refreshToken: string): void {
         localStorage.setItem(this.TOKEN_KEY, token);
+        localStorage.setItem(this.REFRESH_TOKEN_KEY, refreshToken);
         this.authenticated.set(true);
     }
 
@@ -28,6 +30,7 @@ export class AuthService {
 
     logout(): void {
         localStorage.removeItem(this.TOKEN_KEY);
+        localStorage.removeItem(this.REFRESH_TOKEN_KEY);
         this.authenticated.set(false);
     }
 
@@ -37,7 +40,7 @@ export class AuthService {
 
     login(credentials: { email: string, password: string }): Observable<AuthResponse> {
         return this.http.post<AuthResponse>(`${this.baseUrl}/api/auth/login`, credentials).pipe(
-            tap(response => this.setToken(response.token))
+            tap(response => this.setToken(response.token, response.refreshToken))
         );
     }
 };

@@ -14,15 +14,15 @@ export class OauthSuccessComponent {
 
   ngOnInit(): void {
 
-    const token =
-      this.route.snapshot.queryParamMap.get('token');
+    const token = this.route.snapshot.queryParamMap.get('token');
+    const refreshToken = this.route.snapshot.queryParamMap.get('refreshToken');
 
-    if (!token) {
+    if (!token || !refreshToken) {
       this.router.navigate(['/login']);
       return;
     }
 
-    this.authService.setToken(token);
+    this.authService.setToken(token, refreshToken);
 
     this.router.navigate(['/drive/my-drive'], {
       replaceUrl: true

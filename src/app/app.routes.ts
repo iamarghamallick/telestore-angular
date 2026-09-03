@@ -11,30 +11,41 @@ import { NotFoundComponent } from './features/not-found-component/not-found-comp
 export const routes: Routes = [
     {
         path: '',
+        pathMatch: 'full',
         component: HomeComponent,
     },
     {
         path: 'register',
+        pathMatch: 'full',
         component: RegisterComponent,
         canActivate: [loginGuard],
     },
     {
         path: 'login',
+        pathMatch: 'full',
         component: LoginComponent,
         canActivate: [loginGuard],
     },
     {
         path: 'login/oauth2/oauth-success',
+        pathMatch: 'full',
         component: OauthSuccessComponent,
         canActivate: [loginGuard],
     },
     {
         path: 'drive/my-drive',
+        pathMatch: 'full',
         component: DashboardComponent,
         canActivate: [authGuard],
     },
     {
+        path: 'drive',
+        pathMatch: 'full',
+        redirectTo: 'drive/my-drive',
+    },
+    {
         path: 'profile',
+        pathMatch: 'full',
         component: ProfileComponent,
         canActivate: [authGuard],
     },
