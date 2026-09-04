@@ -1,37 +1,40 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Service, signal } from '@angular/core';
-import { finalize, map, Observable, shareReplay, tap } from 'rxjs';
+import { BehaviorSubject, catchError, finalize, map, Observable, of, shareReplay, tap } from 'rxjs';
 import { AuthResponse } from '../../shared/models/auth-response';
 import { environment } from '../../../environments/environment';
+import { Router } from '@angular/router';
 
 @Service()
 export class AuthService {
-    private http = inject(HttpClient);
-    private readonly TOKEN_KEY = "auth-token";
-    private readonly REFRESH_TOKEN_KEY = "refresh-token";
     private baseUrl = environment.apiBaseUrl;
+    private http = inject(HttpClient);
+    private router = inject(Router);
+    private accessToken: string | null = null;
+    private authenticatedSubject = new BehaviorSubject<boolean | null>(null);
 
-    private authenticated = signal(
-        !!localStorage.getItem(this.TOKEN_KEY)
-    );
+    readonly isAuthenticated$ = this.authenticatedSubject.asObservable();
 
     private refreshInProgress$: Observable<string> | null = null;
 
-    readonly isLoggedIn = this.authenticated.asReadonly();
-    readonly googleOAuth2Url = signal<string>(`${this.baseUrl}/oauth2/authorization/google`);
-
-    setToken(token: string, refreshToken: string): void {
-        localStorage.setItem(this.TOKEN_KEY, token);
-        localStorage.setItem(this.REFRESH_TOKEN_KEY, refreshToken);
-        this.authenticated.set(true);
+    get isAuthenticated(): boolean | null {
+        return this.authenticatedSubject.value;
     }
 
     getToken(): string | null {
-        return localStorage.getItem(this.TOKEN_KEY);
+        return this.accessToken;
     }
 
+    setToken(token: string, refreshToken: string): void {
+        this.accessToken = token;
+        this.authenticatedSubject.next(true);
+        localStorage.setItem("refresh-token", refreshToken);
+    }
+
+    readonly googleOAuth2Url: string = `${this.baseUrl}/oauth2/authorization/google`;
+
     getRefreshToken(): string | null {
-        return localStorage.getItem(this.REFRESH_TOKEN_KEY);
+        return localStorage.getItem("refresh-token");
     }
 
     register(credentials: { name: string, email: string, password: string }): Observable<void> {
@@ -40,7 +43,9 @@ export class AuthService {
 
     login(credentials: { email: string, password: string }): Observable<AuthResponse> {
         return this.http.post<AuthResponse>(`${this.baseUrl}/api/auth/login`, credentials).pipe(
-            tap(response => this.setToken(response.token, response.refreshToken))
+            tap(response => {
+                this.setToken(response.token, response.refreshToken);
+            })
         );
     }
 
@@ -51,7 +56,9 @@ export class AuthService {
         }
 
         this.refreshInProgress$ = this.http.post<AuthResponse>(`${this.baseUrl}/api/auth/refresh`, credentials).pipe(
-            tap(response => this.setToken(response.token, response.refreshToken)),
+            tap(response => {
+                this.setToken(response.token, response.refreshToken);
+            }),
             map(response => response.token),
             finalize(() => {
                 this.refreshInProgress$ = null;
@@ -62,9 +69,40 @@ export class AuthService {
         return this.refreshInProgress$;
     }
 
-    logout(): void {
-        localStorage.removeItem(this.TOKEN_KEY);
-        localStorage.removeItem(this.REFRESH_TOKEN_KEY);
-        this.authenticated.set(false);
+    private clearAuth(): void {
+        this.accessToken = null;
+        this.authenticatedSubject.next(false);
+        localStorage.removeItem("refresh-token");
+    }
+
+    logout(): Observable<void> {
+        return this.http.post<void>(`${this.baseUrl}/api/auth/logout`,
+            { refreshToken: this.getRefreshToken() }
+        ).pipe(
+            finalize(() => {
+                this.clearAuth();
+                this.router.navigate(['/login']);
+            })
+        );
+    }
+
+    initializeAuth(): Observable<boolean> {
+
+        const refreshToken = this.getRefreshToken();
+
+        if (!refreshToken) {
+            this.clearAuth();
+            return of(false);
+        }
+
+        return this.refresh({ refreshToken }).pipe(
+            map(() => true),
+
+            catchError(() => {
+                this.clearAuth();
+                this.router.navigate(['/login']);
+                return of(false);
+            })
+        );
     }
 };

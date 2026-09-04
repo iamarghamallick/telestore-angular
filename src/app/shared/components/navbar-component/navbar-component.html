@@ -17,7 +17,7 @@
 
 
         <!-- Desktop Navigation -->
-        @if (isLoggedIn()) {
+        @if (isAuthenticated$ | async) {
 
         <div class="hidden items-center gap-6 md:flex">
 
@@ -102,7 +102,7 @@
 
     <div class="border-t border-slate-200 bg-white px-4 py-4 md:hidden">
 
-        @if (isLoggedIn()) {
+        @if (isAuthenticated$ | async) {
 
         <div class="flex flex-col gap-2">
 

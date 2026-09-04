@@ -4,9 +4,10 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { UserService } from '../../../core/services/user-service';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroBars3, heroCloudArrowUp, heroHome, heroUserCircle, heroXMark } from '@ng-icons/heroicons/outline';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  imports: [RouterLink, RouterLinkActive, NgIcon],
+  imports: [RouterLink, RouterLinkActive, NgIcon, AsyncPipe],
   providers: [
     provideIcons({
       heroBars3,
@@ -24,12 +25,12 @@ export class NavbarComponent {
   private userService = inject(UserService);
 
   private router = inject(Router);
-  readonly isLoggedIn = this.authService.isLoggedIn;
+  isAuthenticated$ = this.authService.isAuthenticated$;
 
   menuOpen = false;
 
   logout(): void {
-    this.authService.logout();
+    this.authService.logout().subscribe();
     this.userService.clearProfile();
     this.router.navigate(['/login']);
   }

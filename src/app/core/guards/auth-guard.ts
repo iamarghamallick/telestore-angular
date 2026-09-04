@@ -6,11 +6,11 @@ export const authGuard: CanActivateFn = (route, state) => {
     const authService = inject(AuthService);
     const router = inject(Router);
 
-    if (authService.isLoggedIn()) {
+    if (authService.isAuthenticated === true) {
         return true;
     }
 
-    router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+    router.navigate(['/login']);
 
     return false;
 };
@@ -19,9 +19,8 @@ export const loginGuard: CanActivateFn = (route, state) => {
     const authService = inject(AuthService);
     const router = inject(Router);
 
-    if (authService.isLoggedIn()) {
+    if (authService.isAuthenticated === true) {
         router.navigate(['drive/my-drive']);
-        return false;
     }
 
     return true;

@@ -3,9 +3,10 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroCloudArrowUp, heroFolder, heroHome } from '@ng-icons/heroicons/outline';
 import { AuthService } from '../../core/services/auth-service';
 import { RouterLink } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  imports: [RouterLink, NgIcon],
+  imports: [RouterLink, NgIcon, AsyncPipe],
   providers: [
     provideIcons({
       heroHome,
@@ -19,5 +20,5 @@ import { RouterLink } from '@angular/router';
 export class NotFoundComponent {
   private authService = inject(AuthService);
 
-  readonly isLoggedIn = this.authService.isLoggedIn;
+  isAuthenticated$ = this.authService.isAuthenticated$;
 }

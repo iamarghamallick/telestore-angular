@@ -13,7 +13,7 @@ export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  googleOAuth2Url = this.authService.googleOAuth2Url();
+  googleOAuth2Url = this.authService.googleOAuth2Url;
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],

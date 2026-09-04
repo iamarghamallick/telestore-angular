@@ -8,6 +8,7 @@ const PUBLIC_ENDPOINTS = [
     "/api/auth/register",
     "/api/auth/login",
     "/api/auth/refresh",
+    "/api/auth/logout",
     "/oauth2/"
 ];
 
@@ -19,14 +20,14 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
         return PUBLIC_ENDPOINTS.some((endpoint) => url.includes(endpoint));
     };
 
-    const addToken = (request: HttpRequest<any>, token: string): HttpRequest<any> => {
+    const addToken = (request: HttpRequest<any>, token: string | null): HttpRequest<any> => {
         return request.clone({
             setHeaders: { Authorization: `Bearer ${token}` }
         });
     };
 
     const forceLogout = (): void => {
-        authService.logout();
+        authService.logout().subscribe();
         router.navigate(['/login']);
     };
 
@@ -36,13 +37,7 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
 
     const token = authService.getToken();
 
-    let modifiedReq = req;
-
-    if (token) {
-        modifiedReq = addToken(req, token);
-    } else {
-        forceLogout();
-    }
+    let modifiedReq = addToken(req, token);
 
     return next(modifiedReq).pipe(
         catchError((error: HttpErrorResponse) => {

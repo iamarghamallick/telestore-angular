@@ -3,13 +3,11 @@ import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { AuthService } from '../../core/services/auth-service';
 import { heroArrowDownTray, heroArrowRight, heroArrowsRightLeft, heroCheckCircle, heroCloudArrowUp, heroDocument, heroDocumentText, heroFolder, heroHome, heroLockClosed, heroMagnifyingGlass, heroServerStack, heroShieldCheck, heroUser } from '@ng-icons/heroicons/outline';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-home-component',
-  imports: [
-    RouterLink,
-    NgIcon
-  ],
+  imports: [RouterLink, NgIcon],
   providers: [
     provideIcons({
       heroArrowRight,
@@ -34,5 +32,5 @@ export class HomeComponent {
 
   private authService = inject(AuthService);
 
-  readonly isLoggedIn = this.authService.isLoggedIn;
+  isAuthenticated = this.authService.isAuthenticated === true;
 }
