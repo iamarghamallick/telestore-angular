@@ -2,11 +2,12 @@ import { HttpErrorResponse, HttpInterceptorFn, HttpRequest } from "@angular/comm
 import { AuthService } from "../services/auth-service";
 import { inject } from "@angular/core";
 import { Router } from "@angular/router";
-import { catchError, throwError } from "rxjs";
+import { catchError, switchMap, throwError } from "rxjs";
 
 const PUBLIC_ENDPOINTS = [
     "/api/auth/register",
     "/api/auth/login",
+    "/api/auth/refresh",
     "/oauth2/"
 ];
 
@@ -34,6 +35,7 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
     }
 
     const token = authService.getToken();
+
     let modifiedReq = req;
 
     if (token) {
@@ -43,12 +45,25 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
     }
 
     return next(modifiedReq).pipe(
-        catchError((error) => {
-            if (
-                error instanceof HttpErrorResponse &&
-                (error.status === 401 || error.status === 403)
-            ) {
-                forceLogout();
+        catchError((error: HttpErrorResponse) => {
+            if (error.status === 401) {
+                const refreshToken = authService.getRefreshToken();
+
+                if (!refreshToken) {
+                    forceLogout();
+                    return throwError(() => error);
+                }
+
+                return authService.refresh({ refreshToken }).pipe(
+                    switchMap(newToken => {
+                        const retryRequest = addToken(req, newToken);
+                        return next(retryRequest);
+                    }),
+                    catchError(refreshError => {
+                        forceLogout();
+                        return throwError(() => refreshError);
+                    })
+                )
             }
             return throwError(() => error);
         })

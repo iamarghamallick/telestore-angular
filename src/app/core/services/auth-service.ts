@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Service, signal } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { finalize, map, Observable, shareReplay, tap } from 'rxjs';
 import { AuthResponse } from '../../shared/models/auth-response';
 import { environment } from '../../../environments/environment';
 
@@ -15,6 +15,8 @@ export class AuthService {
         !!localStorage.getItem(this.TOKEN_KEY)
     );
 
+    private refreshInProgress$: Observable<string> | null = null;
+
     readonly isLoggedIn = this.authenticated.asReadonly();
     readonly googleOAuth2Url = signal<string>(`${this.baseUrl}/oauth2/authorization/google`);
 
@@ -28,10 +30,8 @@ export class AuthService {
         return localStorage.getItem(this.TOKEN_KEY);
     }
 
-    logout(): void {
-        localStorage.removeItem(this.TOKEN_KEY);
-        localStorage.removeItem(this.REFRESH_TOKEN_KEY);
-        this.authenticated.set(false);
+    getRefreshToken(): string | null {
+        return localStorage.getItem(this.REFRESH_TOKEN_KEY);
     }
 
     register(credentials: { name: string, email: string, password: string }): Observable<void> {
@@ -42,5 +42,29 @@ export class AuthService {
         return this.http.post<AuthResponse>(`${this.baseUrl}/api/auth/login`, credentials).pipe(
             tap(response => this.setToken(response.token, response.refreshToken))
         );
+    }
+
+    refresh(credentials: { refreshToken: string | null }): Observable<string> {
+
+        if (this.refreshInProgress$) {
+            return this.refreshInProgress$;
+        }
+
+        this.refreshInProgress$ = this.http.post<AuthResponse>(`${this.baseUrl}/api/auth/refresh`, credentials).pipe(
+            tap(response => this.setToken(response.token, response.refreshToken)),
+            map(response => response.token),
+            finalize(() => {
+                this.refreshInProgress$ = null;
+            }),
+            shareReplay(1)
+        );
+
+        return this.refreshInProgress$;
+    }
+
+    logout(): void {
+        localStorage.removeItem(this.TOKEN_KEY);
+        localStorage.removeItem(this.REFRESH_TOKEN_KEY);
+        this.authenticated.set(false);
     }
 };

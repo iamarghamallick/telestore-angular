@@ -149,7 +149,7 @@ export class DashboardComponent {
   downloadingFileId = signal<string | null>(null);
 
   ngOnInit(): void {
-    this.loadAllFolders();
+    // this.loadAllFolders();
     this.loadCurrentFolder();
   }
 
