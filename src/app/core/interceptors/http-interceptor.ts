@@ -42,14 +42,7 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
     return next(modifiedReq).pipe(
         catchError((error: HttpErrorResponse) => {
             if (error.status === 401) {
-                const refreshToken = authService.getRefreshToken();
-
-                if (!refreshToken) {
-                    forceLogout();
-                    return throwError(() => error);
-                }
-
-                return authService.refresh({ refreshToken }).pipe(
+                return authService.refresh().pipe(
                     switchMap(newToken => {
                         const retryRequest = addToken(req, newToken);
                         return next(retryRequest);

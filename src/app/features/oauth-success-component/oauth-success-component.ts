@@ -22,7 +22,7 @@ export class OauthSuccessComponent {
       return;
     }
 
-    this.authService.setToken(token, refreshToken);
+    this.authService.setToken(token);
 
     this.router.navigate(['/drive/my-drive'], {
       replaceUrl: true

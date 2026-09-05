@@ -32,7 +32,6 @@ export class NavbarComponent {
   logout(): void {
     this.authService.logout().subscribe();
     this.userService.clearProfile();
-    this.router.navigate(['/login']);
   }
 
   toggleMenu(): void {

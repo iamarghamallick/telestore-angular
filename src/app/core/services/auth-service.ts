@@ -25,39 +25,34 @@ export class AuthService {
         return this.accessToken;
     }
 
-    setToken(token: string, refreshToken: string): void {
+    setToken(token: string): void {
         this.accessToken = token;
         this.authenticatedSubject.next(true);
-        localStorage.setItem("refresh-token", refreshToken);
     }
 
     readonly googleOAuth2Url: string = `${this.baseUrl}/oauth2/authorization/google`;
-
-    getRefreshToken(): string | null {
-        return localStorage.getItem("refresh-token");
-    }
 
     register(credentials: { name: string, email: string, password: string }): Observable<void> {
         return this.http.post<void>(`${this.baseUrl}/api/auth/register`, credentials);
     }
 
     login(credentials: { email: string, password: string }): Observable<AuthResponse> {
-        return this.http.post<AuthResponse>(`${this.baseUrl}/api/auth/login`, credentials).pipe(
+        return this.http.post<AuthResponse>(`${this.baseUrl}/api/auth/login`, credentials, { withCredentials: true }).pipe(
             tap(response => {
-                this.setToken(response.token, response.refreshToken);
+                this.setToken(response.token);
             })
         );
     }
 
-    refresh(credentials: { refreshToken: string | null }): Observable<string> {
+    refresh(): Observable<string> {
 
         if (this.refreshInProgress$) {
             return this.refreshInProgress$;
         }
 
-        this.refreshInProgress$ = this.http.post<AuthResponse>(`${this.baseUrl}/api/auth/refresh`, credentials).pipe(
+        this.refreshInProgress$ = this.http.post<AuthResponse>(`${this.baseUrl}/api/auth/refresh`, {}, { withCredentials: true }).pipe(
             tap(response => {
-                this.setToken(response.token, response.refreshToken);
+                this.setToken(response.token);
             }),
             map(response => response.token),
             finalize(() => {
@@ -72,12 +67,11 @@ export class AuthService {
     private clearAuth(): void {
         this.accessToken = null;
         this.authenticatedSubject.next(false);
-        localStorage.removeItem("refresh-token");
     }
 
     logout(): Observable<void> {
         return this.http.post<void>(`${this.baseUrl}/api/auth/logout`,
-            { refreshToken: this.getRefreshToken() }
+            {}, { withCredentials: true }
         ).pipe(
             finalize(() => {
                 this.clearAuth();
@@ -87,15 +81,7 @@ export class AuthService {
     }
 
     initializeAuth(): Observable<boolean> {
-
-        const refreshToken = this.getRefreshToken();
-
-        if (!refreshToken) {
-            this.clearAuth();
-            return of(false);
-        }
-
-        return this.refresh({ refreshToken }).pipe(
+        return this.refresh().pipe(
             map(() => true),
 
             catchError(() => {
