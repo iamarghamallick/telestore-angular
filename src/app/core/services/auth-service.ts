@@ -86,7 +86,6 @@ export class AuthService {
 
             catchError(() => {
                 this.clearAuth();
-                this.router.navigate(['/login']);
                 return of(false);
             })
         );

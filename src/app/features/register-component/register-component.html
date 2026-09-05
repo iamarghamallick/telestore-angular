@@ -1,112 +1,212 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-    <div class="w-full max-w-md rounded-xl bg-white p-8 my-8 shadow-lg">
+<div class="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-10 sm:py-16">
+    <div class="w-full max-w-md">
 
-        <h1 class="mb-2 text-center text-2xl font-bold text-gray-800">
-            Create Account
-        </h1>
-
-        <p class="mb-6 text-center text-sm text-gray-500">
-            Register to start using TeleStore
-        </p>
-
-        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5">
-
-            <!-- Name -->
-            <div>
-                <label for="name" class="mb-1 block text-sm font-medium text-gray-700">
-                    Name
-                </label>
-
-                <input id="name" type="text" formControlName="name" placeholder="Your name" class="w-full rounded-lg border border-gray-300 px-4 py-2.5
-                           outline-none transition focus:ring-2 focus:ring-blue-200" />
-
-                @if (registerForm.controls.name.touched &&
-                registerForm.controls.name.invalid) {
-                <p class="mt-1 text-sm text-red-500">
-                    Name is required.
-                </p>
-                }
+        <!-- Brand -->
+        <a routerLink="/" class="mb-8 flex items-center justify-center gap-2">
+            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white">
+                <ng-icon name="heroCloudArrowUp" size="16"></ng-icon>
             </div>
-
-            <!-- Email -->
-            <div>
-                <label for="email" class="mb-1 block text-sm font-medium text-gray-700">
-                    Email
-                </label>
-
-                <input id="email" type="email" formControlName="email" placeholder="you@example.com" class="w-full rounded-lg border border-gray-300 px-4 py-2.5
-                           outline-none transition focus:ring-2 focus:ring-blue-200" />
-
-                @if (registerForm.controls.email.touched &&
-                registerForm.controls.email.invalid) {
-                <p class="mt-1 text-sm text-red-500">
-                    Please enter a valid email.
-                </p>
-                }
-            </div>
-
-            <!-- Password -->
-            <div>
-                <label for="password" class="mb-1 block text-sm font-medium text-gray-700">
-                    Password
-                </label>
-
-                <input id="password" type="password" formControlName="password" placeholder="••••••••" class="w-full rounded-lg border px-4 py-2.5
-                           outline-none transition
-                           focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
-
-                @if (registerForm.controls.password.touched &&
-                registerForm.controls.password.invalid) {
-                <p class="mt-1 text-sm text-red-500">
-                    Password is required.
-                </p>
-                }
-            </div>
-
-            <!-- Submit -->
-            <button type="submit" [disabled]="registerForm.invalid" class="w-full rounded-lg bg-blue-600 px-4 py-2.5
-                       font-medium text-white transition
-                       hover:bg-blue-700
-                       disabled:cursor-not-allowed
-                       disabled:opacity-50">
-                Register
-            </button>
-
-        </form>
-
-        <!-- Divider -->
-        <div class="my-6 flex items-center">
-            <div class="flex-1 border-t border-gray-300"></div>
-            <span class="px-4 text-sm text-gray-400">OR</span>
-            <div class="flex-1 border-t border-gray-300"></div>
-        </div>
-
-        <!-- Google Register -->
-        <a href="{{ googleOAuth2Url }}" class="flex w-full items-center justify-center gap-3 rounded-lg
-                   border border-gray-300 bg-white px-4 py-2.5
-                   font-medium text-gray-700 transition
-                   hover:bg-gray-50">
-            <svg class="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
-                <path fill="#4285F4"
-                    d="M21.35 12.27c0-.73-.06-1.43-.18-2.1H12v3.98h5.23a4.47 4.47 0 0 1-1.94 2.93v2.43h3.14c1.84-1.69 2.92-4.18 2.92-7.24Z" />
-                <path fill="#34A853"
-                    d="M12 21.75c2.63 0 4.84-.87 6.45-2.35l-3.14-2.43c-.87.58-1.98.92-3.31.92-2.54 0-4.7-1.72-5.47-4.03H3.28v2.5A9.75 9.75 0 0 0 12 21.75Z" />
-                <path fill="#FBBC05"
-                    d="M6.53 13.86a5.86 5.86 0 0 1 0-3.72V7.64H3.28a9.75 9.75 0 0 0 0 8.72l3.25-2.5Z" />
-                <path fill="#EA4335"
-                    d="M12 6.11c1.43 0 2.71.49 3.72 1.46l2.79-2.79C16.84 3.2 14.63 2.25 12 2.25a9.75 9.75 0 0 0-8.72 5.39l3.25 2.5 0 0Z" />
-            </svg>
-
-            Continue with Google
+            <span class="text-sm font-bold text-slate-800">TeleStore</span>
         </a>
 
-        <!-- Login link -->
-        <p class="mt-6 text-center text-sm text-gray-500">
-            Already have an account?
-            <a routerLink="/login" class="font-medium text-blue-600 hover:text-blue-700">
-                Login
-            </a>
-        </p>
+        <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-xl shadow-slate-200/70 sm:p-10">
 
+            <h1 class="text-center text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
+                Create your account
+            </h1>
+
+            <p class="mt-2 text-center text-sm text-slate-500">
+                Start storing and organizing your files
+            </p>
+
+            <!-- Server error banner -->
+            @if (errorMessage()) {
+            <div role="alert"
+                class="mt-6 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                <ng-icon name="heroExclamationTriangle" size="18" class="mt-0.5 shrink-0"></ng-icon>
+                <span>{{ errorMessage() }}</span>
+            </div>
+            }
+
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="mt-6 space-y-5" novalidate>
+
+                <!-- Name -->
+                <div>
+                    <label for="name" class="mb-1.5 block text-sm font-medium text-slate-700">
+                        Name
+                    </label>
+
+                    <div class="relative">
+                        <span
+                            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <ng-icon name="heroUser" size="18"></ng-icon>
+                        </span>
+
+                        <input id="name" type="text" formControlName="name" placeholder="Your name" autocomplete="name"
+                            [attr.aria-invalid]="registerForm.controls.name.touched && registerForm.controls.name.invalid"
+                            aria-describedby="name-error" class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-4 text-sm text-slate-900
+                     outline-none transition placeholder:text-slate-400
+                     focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100
+                     [&.ng-invalid.ng-touched]:border-red-300 [&.ng-invalid.ng-touched]:focus:ring-red-100" />
+                    </div>
+
+                    @if (registerForm.controls.name.touched && registerForm.controls.name.invalid) {
+                    <p id="name-error" class="mt-1.5 text-xs text-red-500">Name is required.</p>
+                    }
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label for="email" class="mb-1.5 block text-sm font-medium text-slate-700">
+                        Email
+                    </label>
+
+                    <div class="relative">
+                        <span
+                            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <ng-icon name="heroEnvelope" size="18"></ng-icon>
+                        </span>
+
+                        <input id="email" type="email" formControlName="email" placeholder="you@example.com"
+                            autocomplete="email"
+                            [attr.aria-invalid]="registerForm.controls.email.touched && registerForm.controls.email.invalid"
+                            aria-describedby="email-error" class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-4 text-sm text-slate-900
+                     outline-none transition placeholder:text-slate-400
+                     focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100
+                     [&.ng-invalid.ng-touched]:border-red-300 [&.ng-invalid.ng-touched]:focus:ring-red-100" />
+                    </div>
+
+                    @if (registerForm.controls.email.touched && registerForm.controls.email.invalid) {
+                    <p id="email-error" class="mt-1.5 text-xs text-red-500">
+                        @if (registerForm.controls.email.hasError('required')) {
+                        Email is required.
+                        } @else {
+                        Please enter a valid email address.
+                        }
+                    </p>
+                    }
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label for="password" class="mb-1.5 block text-sm font-medium text-slate-700">
+                        Password
+                    </label>
+
+                    <div class="relative">
+                        <span
+                            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <ng-icon name="heroLockClosed" size="18"></ng-icon>
+                        </span>
+
+                        <input id="password" [type]="showPassword() ? 'text' : 'password'" formControlName="password"
+                            placeholder="••••••••" autocomplete="new-password"
+                            [attr.aria-invalid]="registerForm.controls.password.touched && registerForm.controls.password.invalid"
+                            aria-describedby="password-error" class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-11 text-sm text-slate-900
+                     outline-none transition placeholder:text-slate-400
+                     focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100
+                     [&.ng-invalid.ng-touched]:border-red-300 [&.ng-invalid.ng-touched]:focus:ring-red-100" />
+
+                        <button type="button" (click)="togglePasswordVisibility()"
+                            [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+                            class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600">
+                            <ng-icon [name]="showPassword() ? 'heroEyeSlash' : 'heroEye'" size="18"></ng-icon>
+                        </button>
+                    </div>
+
+                    @if (registerForm.controls.password.touched && registerForm.controls.password.invalid) {
+                    <p id="password-error" class="mt-1.5 text-xs text-red-500">
+                        @if (registerForm.controls.password.hasError('required')) {
+                        Password is required.
+                        } @else {
+                        Password must be at least 8 characters.
+                        }
+                    </p>
+                    } @else {
+                    <p class="mt-1.5 text-xs text-slate-400">Use at least 8 characters.</p>
+                    }
+                </div>
+
+                <!-- Confirm Password -->
+                <div>
+                    <label for="confirmPassword" class="mb-1.5 block text-sm font-medium text-slate-700">
+                        Confirm password
+                    </label>
+
+                    <div class="relative">
+                        <span
+                            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <ng-icon name="heroLockClosed" size="18"></ng-icon>
+                        </span>
+
+                        <input id="confirmPassword" [type]="showConfirmPassword() ? 'text' : 'password'"
+                            formControlName="confirmPassword" placeholder="••••••••" autocomplete="new-password"
+                            [attr.aria-invalid]="
+                registerForm.controls.confirmPassword.touched &&
+                (registerForm.controls.confirmPassword.invalid || registerForm.hasError('passwordsMismatch'))
+              " aria-describedby="confirm-password-error" class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-11 text-sm text-slate-900
+                     outline-none transition placeholder:text-slate-400
+                     focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100
+                     [&.ng-invalid.ng-touched]:border-red-300 [&.ng-invalid.ng-touched]:focus:ring-red-100" />
+
+                        <button type="button" (click)="toggleConfirmPasswordVisibility()"
+                            [attr.aria-label]="showConfirmPassword() ? 'Hide password' : 'Show password'"
+                            class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600">
+                            <ng-icon [name]="showConfirmPassword() ? 'heroEyeSlash' : 'heroEye'" size="18"></ng-icon>
+                        </button>
+                    </div>
+
+                    @if (registerForm.controls.confirmPassword.touched &&
+                    registerForm.controls.confirmPassword.hasError('required')) {
+                    <p id="confirm-password-error" class="mt-1.5 text-xs text-red-500">Please confirm your password.</p>
+                    } @else if (registerForm.controls.confirmPassword.touched &&
+                    registerForm.hasError('passwordsMismatch')) {
+                    <p id="confirm-password-error" class="mt-1.5 text-xs text-red-500">Passwords don't match.</p>
+                    }
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" [disabled]="isLoading()" class="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5
+                 text-sm font-semibold text-white shadow-sm transition
+                 hover:bg-indigo-700 hover:shadow-md cursor-pointer
+                 disabled:cursor-not-allowed disabled:opacity-60">
+                    @if (isLoading()) {
+                    <ng-icon name="heroArrowPath" size="16" class="animate-spin"></ng-icon>
+                    Creating account…
+                    } @else {
+                    Create account
+                    }
+                </button>
+            </form>
+
+            <!-- Divider -->
+            <div class="my-6 flex items-center">
+                <div class="flex-1 border-t border-slate-200"></div>
+                <span class="px-3 text-xs font-medium uppercase tracking-wider text-slate-400">or</span>
+                <div class="flex-1 border-t border-slate-200"></div>
+            </div>
+
+            <!-- Google Register -->
+            <a href="{{ googleOAuth2Url }}" class="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white
+            px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill="#4285F4"
+                        d="M21.35 12.27c0-.73-.06-1.43-.18-2.1H12v3.98h5.23a4.47 4.47 0 0 1-1.94 2.93v2.43h3.14c1.84-1.69 2.92-4.18 2.92-7.24Z" />
+                    <path fill="#34A853"
+                        d="M12 21.75c2.63 0 4.84-.87 6.45-2.35l-3.14-2.43c-.87.58-1.98.92-3.31.92-2.54 0-4.7-1.72-5.47-4.03H3.28v2.5A9.75 9.75 0 0 0 12 21.75Z" />
+                    <path fill="#FBBC05"
+                        d="M6.53 13.86a5.86 5.86 0 0 1 0-3.72V7.64H3.28a9.75 9.75 0 0 0 0 8.72l3.25-2.5Z" />
+                    <path fill="#EA4335"
+                        d="M12 6.11c1.43 0 2.71.49 3.72 1.46l2.79-2.79C16.84 3.2 14.63 2.25 12 2.25a9.75 9.75 0 0 0-8.72 5.39l3.25 2.5C7.3 7.83 9.46 6.11 12 6.11Z" />
+                </svg>
+                Continue with Google
+            </a>
+
+            <!-- Login link -->
+            <p class="mt-6 text-center text-sm text-slate-500">
+                Already have an account?
+                <a routerLink="/login" class="font-semibold text-indigo-600 hover:text-indigo-700">Log in</a>
+            </p>
+        </div>
     </div>
 </div>

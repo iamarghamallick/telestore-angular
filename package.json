@@ -19,6 +19,7 @@
     "@angular/router": "^22.1.0",
     "@ng-icons/core": "^35.0.1",
     "@ng-icons/heroicons": "^35.0.1",
+    "@ng-icons/phosphor-icons": "^35.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

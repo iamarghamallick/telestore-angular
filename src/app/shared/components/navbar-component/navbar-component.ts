@@ -1,10 +1,27 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  ElementRef,
+  HostListener,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { AuthService } from '../../../core/services/auth-service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { UserService } from '../../../core/services/user-service';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroBars3, heroCloudArrowUp, heroHome, heroUserCircle, heroXMark } from '@ng-icons/heroicons/outline';
+import {
+  heroArrowRightOnRectangle,
+  heroBars3,
+  heroCloudArrowUp,
+  heroHome,
+  heroUserCircle,
+  heroXMark,
+  heroArrowPath
+} from '@ng-icons/heroicons/outline';
 import { AsyncPipe } from '@angular/common';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   imports: [RouterLink, RouterLinkActive, NgIcon, AsyncPipe],
@@ -15,7 +32,8 @@ import { AsyncPipe } from '@angular/common';
       heroHome,
       heroUserCircle,
       heroCloudArrowUp,
-    })
+      heroArrowRightOnRectangle,
+    }),
   ],
   selector: 'app-navbar-component',
   templateUrl: './navbar-component.html',
@@ -23,22 +41,70 @@ import { AsyncPipe } from '@angular/common';
 export class NavbarComponent {
   private authService = inject(AuthService);
   private userService = inject(UserService);
-
   private router = inject(Router);
-  isAuthenticated$ = this.authService.isAuthenticated$;
+  private destroyRef = inject(DestroyRef);
+  private elementRef = inject(ElementRef<HTMLElement>);
 
-  menuOpen = false;
+  isAuthenticated$ = this.authService.isAuthenticated$;
+  isLoggingOut = signal(false);
+
+  profileInitial = computed(() => {
+    const name = this.userService.profile()?.name;
+    return name ? name.charAt(0).toUpperCase() : null;
+  });
+
+  menuOpen = signal(false);
+
+  constructor() {
+    this.destroyRef.onDestroy(() => this.lockBodyScroll(false));
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    this.closeMenu();
+  }
+
+  // Close the mobile menu on any click that lands outside this component.
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.menuOpen()) return;
+    const target = event.target as Node;
+    if (!this.elementRef.nativeElement.contains(target)) {
+      this.closeMenu();
+    }
+  }
 
   logout(): void {
-    this.authService.logout().subscribe();
+    if (this.isLoggingOut()) return;
+    this.isLoggingOut.set(true);
+
+    this.authService
+      .logout()
+      .pipe(finalize(() => this.isLoggingOut.set(false)))
+      .subscribe({
+        next: () => this.handleLoggedOut(),
+        error: () => this.handleLoggedOut(),
+      });
+  }
+
+  private handleLoggedOut(): void {
     this.userService.clearProfile();
+    this.closeMenu();
+    this.router.navigate(['/']);
   }
 
   toggleMenu(): void {
-    this.menuOpen = !this.menuOpen;
+    this.menuOpen.update((open) => !open);
+    this.lockBodyScroll(this.menuOpen());
   }
 
   closeMenu(): void {
-    this.menuOpen = false;
+    if (!this.menuOpen()) return;
+    this.menuOpen.set(false);
+    this.lockBodyScroll(false);
+  }
+
+  private lockBodyScroll(lock: boolean): void {
+    document.body.style.overflow = lock ? 'hidden' : '';
   }
 }
