@@ -11,6 +11,8 @@
 
         <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-xl shadow-slate-200/70 sm:p-10">
 
+            @if (!showSuccess()) {
+
             <h1 class="text-center text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
                 Create your account
             </h1>
@@ -207,6 +209,38 @@
                 Already have an account?
                 <a routerLink="/login" class="font-semibold text-indigo-600 hover:text-indigo-700">Log in</a>
             </p>
+
+            } @else {
+
+            <div class="text-center">
+                <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50">
+                    <ng-icon name="heroCheckCircle" size="28" class="text-emerald-600"></ng-icon>
+                </div>
+
+                <h1 class="mt-5 text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
+                    Check your email
+                </h1>
+
+                <p class="mt-2 text-sm leading-6 text-slate-500">
+                    We sent a verification link to
+                    <span class="font-medium text-slate-700">{{ registeredEmail() }}</span>.
+                    Verify your email to finish creating your account.
+                </p>
+
+                <div class="mt-8 space-y-3">
+                    <a routerLink="/login"
+                        class="block w-full rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700">
+                        Go to login
+                    </a>
+
+                    <a routerLink="/resend-verification" [queryParams]="{ email: registeredEmail() }"
+                        class="block w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+                        Resend verification email
+                    </a>
+                </div>
+            </div>
+
+            }
         </div>
     </div>
 </div>

@@ -31,6 +31,7 @@ export class LoginComponent {
 
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
+  showVerificationHelp = signal(false);
   showPassword = signal(false);
 
   loginForm = this.fb.group({
@@ -42,6 +43,7 @@ export class LoginComponent {
     // Clear a stale server-side error as soon as the user edits the form again.
     this.loginForm.valueChanges.subscribe(() => {
       if (this.errorMessage()) this.errorMessage.set(null);
+      if (this.showVerificationHelp()) this.showVerificationHelp.set(false);
     });
   }
 
@@ -56,12 +58,16 @@ export class LoginComponent {
     }
 
     this.errorMessage.set(null);
+    this.showVerificationHelp.set(false);
     this.isLoading.set(true);
 
     this.authService.login(this.loginForm.getRawValue()).subscribe({
       next: () => this.router.navigate(['drive/my-drive']),
       error: (err: HttpErrorResponse) => {
         this.isLoading.set(false);
+        if (err.status === 403) {
+          this.showVerificationHelp.set(true);
+        }
         this.errorMessage.set(this.resolveErrorMessage(err));
       },
     });
@@ -75,7 +81,7 @@ export class LoginComponent {
       return 'Incorrect email or password. Please try again.';
     }
     if (err.status === 403) {
-      return "You don't have access to this account.";
+      return 'Your email address is not verified yet. Check your inbox or resend the verification email.';
     }
     if (err.status === 429) {
       return 'Too many attempts. Please wait a moment and try again.';

@@ -9,6 +9,8 @@ import { ProfileComponent } from './features/profile-component/profile-component
 import { NotFoundComponent } from './features/not-found-component/not-found-component';
 import { ForgotPasswordComponent } from './features/forgot-password-component/forgot-password-component';
 import { ResetPasswordComponent } from './features/reset-password-component/reset-password-component';
+import { ResendVerificationComponent } from './features/resend-verification-component/resend-verification-component';
+import { VerifyEmailComponent } from './features/verify-email-component/verify-email-component';
 
 export const routes: Routes = [
     {
@@ -60,6 +62,16 @@ export const routes: Routes = [
         path: 'reset-password',
         pathMatch: 'full',
         component: ResetPasswordComponent,
+    },
+    {
+        path: 'resend-verification',
+        pathMatch: 'full',
+        component: ResendVerificationComponent,
+    },
+    {
+        path: 'verify-email',
+        pathMatch: 'full',
+        component: VerifyEmailComponent,
     },
     {
         path: '**',

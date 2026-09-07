@@ -36,6 +36,23 @@ export class AuthService {
         return this.http.post<void>(`${this.baseUrl}/api/auth/register`, credentials);
     }
 
+    verifyEmail(token: string): Observable<void> {
+        return this.http.get<void>(
+            `${this.baseUrl}/api/auth/verify-email`,
+            {
+                params: {
+                    token
+                }
+            }
+        );
+    }
+
+    resendVerification(email: string): Observable<void> {
+        return this.http.post<void>(
+            `${this.baseUrl}/api/auth/resend-verification`, { email }
+        );
+    }
+
     login(credentials: { email: string, password: string }): Observable<AuthResponse> {
         return this.http.post<AuthResponse>(`${this.baseUrl}/api/auth/login`, credentials, { withCredentials: true }).pipe(
             tap(response => {

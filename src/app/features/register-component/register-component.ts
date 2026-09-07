@@ -7,10 +7,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { AuthService } from '../../core/services/auth-service';
-import { heroArrowPath, heroCloudArrowUp, heroEnvelope, heroExclamationTriangle, heroEye, heroEyeSlash, heroLockClosed, heroUser } from '@ng-icons/heroicons/outline';
+import { heroArrowPath, heroCheckCircle, heroCloudArrowUp, heroEnvelope, heroExclamationTriangle, heroEye, heroEyeSlash, heroLockClosed, heroUser } from '@ng-icons/heroicons/outline';
 
 @Component({
   imports: [ReactiveFormsModule, RouterLink, NgIcon],
@@ -23,7 +23,8 @@ import { heroArrowPath, heroCloudArrowUp, heroEnvelope, heroExclamationTriangle,
       heroUser,
       heroExclamationTriangle,
       heroArrowPath,
-      heroEnvelope
+      heroEnvelope,
+      heroCheckCircle
     })
   ],
   selector: 'app-register-component',
@@ -32,12 +33,13 @@ import { heroArrowPath, heroCloudArrowUp, heroEnvelope, heroExclamationTriangle,
 export class RegisterComponent {
   private fb = inject(NonNullableFormBuilder);
   private authService = inject(AuthService);
-  private router = inject(Router);
 
   googleOAuth2Url = this.authService.googleOAuth2Url;
 
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
+  showSuccess = signal(false);
+  registeredEmail = signal('');
   showPassword = signal(false);
   showConfirmPassword = signal(false);
 
@@ -77,7 +79,11 @@ export class RegisterComponent {
     const { name, email, password } = this.registerForm.getRawValue();
 
     this.authService.register({ name, email, password }).subscribe({
-      next: () => this.router.navigate(['login']),
+      next: () => {
+        this.isLoading.set(false);
+        this.showSuccess.set(true);
+        this.registeredEmail.set(email);
+      },
       error: (err: HttpErrorResponse) => {
         this.isLoading.set(false);
         this.errorMessage.set(this.resolveErrorMessage(err));

@@ -6,6 +6,8 @@ import { catchError, switchMap, throwError } from "rxjs";
 
 const PUBLIC_ENDPOINTS = [
     "/api/auth/register",
+    "/api/auth/verify-email",
+    "/api/auth/resend-verification",
     "/api/auth/login",
     "/api/auth/refresh",
     "/api/auth/logout",
