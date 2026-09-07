@@ -7,6 +7,8 @@ import { RegisterComponent } from './features/register-component/register-compon
 import { OauthSuccessComponent } from './features/oauth-success-component/oauth-success-component';
 import { ProfileComponent } from './features/profile-component/profile-component';
 import { NotFoundComponent } from './features/not-found-component/not-found-component';
+import { ForgotPasswordComponent } from './features/forgot-password-component/forgot-password-component';
+import { ResetPasswordComponent } from './features/reset-password-component/reset-password-component';
 
 export const routes: Routes = [
     {
@@ -48,6 +50,16 @@ export const routes: Routes = [
         pathMatch: 'full',
         component: ProfileComponent,
         canActivate: [authGuard],
+    },
+    {
+        path: 'forgot-password',
+        pathMatch: 'full',
+        component: ForgotPasswordComponent,
+    },
+    {
+        path: 'reset-password',
+        pathMatch: 'full',
+        component: ResetPasswordComponent,
     },
     {
         path: '**',

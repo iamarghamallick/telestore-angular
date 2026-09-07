@@ -80,6 +80,14 @@ export class AuthService {
         );
     }
 
+    forgotPassword(email: string): Observable<void> {
+        return this.http.post<void>(`${this.baseUrl}/api/auth/forgot-password`, { email });
+    }
+
+    resetPassword(token: string, newPassword: string): Observable<void> {
+        return this.http.post<void>(`${this.baseUrl}/api/auth/reset-password`, { token, newPassword });
+    }
+
     initializeAuth(): Observable<boolean> {
         return this.refresh().pipe(
             map(() => true),
