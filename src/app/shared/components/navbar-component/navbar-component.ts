@@ -18,10 +18,13 @@ import {
   heroHome,
   heroUserCircle,
   heroXMark,
-  heroArrowPath
+  heroArrowPath,
+  heroSun,
+  heroMoon
 } from '@ng-icons/heroicons/outline';
 import { AsyncPipe } from '@angular/common';
 import { finalize } from 'rxjs/operators';
+import { ThemeService } from '../../../core/services/theme-service';
 
 @Component({
   imports: [RouterLink, RouterLinkActive, NgIcon, AsyncPipe],
@@ -33,6 +36,8 @@ import { finalize } from 'rxjs/operators';
       heroUserCircle,
       heroCloudArrowUp,
       heroArrowRightOnRectangle,
+      heroSun,
+      heroMoon,
     }),
   ],
   selector: 'app-navbar-component',
@@ -44,6 +49,8 @@ export class NavbarComponent {
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
   private elementRef = inject(ElementRef<HTMLElement>);
+
+  themeService = inject(ThemeService);
 
   isAuthenticated$ = this.authService.isAuthenticated$;
   isLoggingOut = signal(false);

@@ -1,58 +1,84 @@
-<footer class="border-t border-slate-200 bg-white">
+<footer
+    class="border-t border-slate-200 bg-white transition-colors duration-200 dark:border-slate-800 dark:bg-slate-950">
+
     <div class="mx-auto max-w-7xl px-6 py-10 lg:px-8">
 
         <div class="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
 
             <!-- Brand -->
             <div class="flex flex-col gap-3">
+
                 <div class="flex items-center gap-2">
-                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white">
+                    <div
+                        class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white dark:bg-indigo-500">
                         <ng-icon name="heroCloudArrowUp" size="17"></ng-icon>
                     </div>
-                    <span class="font-semibold text-slate-900">TeleStore</span>
+
+                    <span class="font-semibold text-slate-900 dark:text-white">
+                        TeleStore
+                    </span>
                 </div>
 
-                <p class="max-w-xs text-sm leading-6 text-slate-500">
+                <p class="max-w-xs text-sm leading-6 text-slate-500 dark:text-slate-400">
                     Simple storage for everything you create.
                 </p>
             </div>
 
             <!-- Developer credit -->
             <div class="flex flex-col gap-3 sm:items-end">
-                <p class="flex items-center gap-1.5 text-sm text-slate-500">
+
+                <p class="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400">
                     Built with
-                    <ng-icon name="heroHeart" size="14" class="text-rose-500"></ng-icon>
+
+                    <ng-icon name="heroHeart" size="14" class="text-rose-500">
+                    </ng-icon>
+
                     by
-                    <span class="font-semibold text-slate-800">{{ developerName }}</span>
+
+                    <span class="font-semibold text-slate-800 dark:text-slate-200">
+                        {{ developerName }}
+                    </span>
                 </p>
 
+                <!-- Social links -->
                 <div class="flex items-center gap-2">
-                    <a [href]="githubUrl" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500
-                   transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900">
-                        <ng-icon name="phosphorGithubLogoBold" size="16"></ng-icon>
+
+                    <!-- GitHub -->
+                    <a [href]="githubUrl" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile"
+                        class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:bg-slate-800 dark:hover:text-white">
+
+                        <ng-icon name="phosphorGithubLogoBold" size="16">
+                        </ng-icon>
                     </a>
 
+                    <!-- LinkedIn -->
                     <a [href]="linkedinUrl" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile"
-                        class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500
-                   transition hover:border-slate-300 hover:bg-[#0A66C2]/5 hover:text-[#0A66C2]">
-                        <ng-icon name="phosphorLinkedinLogoBold" size="16"></ng-icon>
+                        class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition hover:border-slate-300 hover:bg-[#0A66C2]/5 hover:text-[#0A66C2] dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:bg-[#0A66C2]/10 dark:hover:text-[#4d9de0]">
+
+                        <ng-icon name="phosphorLinkedinLogoBold" size="16">
+                        </ng-icon>
                     </a>
+
                 </div>
             </div>
         </div>
 
         <!-- Divider -->
-        <div class="my-8 border-t border-slate-100"></div>
+        <div class="my-8 border-t border-slate-100 dark:border-slate-800"></div>
 
         <!-- Bottom bar -->
         <div class="flex flex-col-reverse items-center gap-3 sm:flex-row sm:justify-between">
-            <p class="text-xs text-slate-400">
+
+            <p class="text-xs text-slate-400 dark:text-slate-500">
                 © {{ currentYear }} TeleStore. All rights reserved.
             </p>
 
-            <p class="text-xs text-slate-400">
+            <p class="text-xs text-slate-400 dark:text-slate-500">
                 Made for people who like their files organized.
             </p>
+
         </div>
+
     </div>
+
 </footer>
