@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroCloudArrowUp, heroFolder, heroHome } from '@ng-icons/heroicons/outline';
+import { heroFolder, heroHome } from '@ng-icons/heroicons/outline';
 import { AuthService } from '../../core/services/auth-service';
 import { RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
@@ -10,7 +10,6 @@ import { AsyncPipe } from '@angular/common';
   providers: [
     provideIcons({
       heroHome,
-      heroCloudArrowUp,
       heroFolder,
     })
   ],

@@ -14,7 +14,6 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   heroArrowRightOnRectangle,
   heroBars3,
-  heroCloudArrowUp,
   heroHome,
   heroUserCircle,
   heroXMark,
@@ -34,7 +33,6 @@ import { ThemeService } from '../../../core/services/theme-service';
       heroXMark,
       heroHome,
       heroUserCircle,
-      heroCloudArrowUp,
       heroArrowRightOnRectangle,
       heroSun,
       heroMoon,

@@ -10,9 +10,9 @@ import { AsyncPipe } from '@angular/common';
   imports: [RouterLink, NgIcon],
   providers: [
     provideIcons({
+      heroCloudArrowUp,
       heroArrowRight,
       heroCheckCircle,
-      heroCloudArrowUp,
       heroHome,
       heroMagnifyingGlass,
       heroFolder,

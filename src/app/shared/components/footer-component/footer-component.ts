@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroCloudArrowUp, heroHeart } from '@ng-icons/heroicons/outline';
+import { heroHeart } from '@ng-icons/heroicons/outline';
 import { phosphorGithubLogoBold, phosphorLinkedinLogoBold } from '@ng-icons/phosphor-icons/bold';
 
 @Component({
   imports: [NgIcon],
   providers: [
-    provideIcons({ heroCloudArrowUp, heroHeart, phosphorGithubLogoBold, phosphorLinkedinLogoBold }),
+    provideIcons({ heroHeart, phosphorGithubLogoBold, phosphorLinkedinLogoBold }),
   ],
   selector: 'app-footer-component',
   templateUrl: './footer-component.html',

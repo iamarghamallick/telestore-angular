@@ -2,13 +2,18 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   <title>TeleStore</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="TeleStore — A simpler home for everything you create.">
-  <meta name="theme-color" content="#4f46e5">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <base href="/" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="TeleStore — A simpler home for everything you create." />
+  <meta name="theme-color" content="#4f46e5" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
   <script>
     (function () {
       try {
@@ -16,25 +21,17 @@
 
         var isDark =
           theme === 'dark' ||
-          (
-            theme !== 'light' &&
-            window.matchMedia('(prefers-color-scheme: dark)').matches
-          );
+          (theme !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
         document.documentElement.classList.toggle('dark', isDark);
 
-        document.documentElement.style.colorScheme =
-          isDark ? 'dark' : 'light';
-
+        document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
       } catch (e) {
-        var isDark = window.matchMedia(
-          '(prefers-color-scheme: dark)'
-        ).matches;
+        var isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
         document.documentElement.classList.toggle('dark', isDark);
 
-        document.documentElement.style.colorScheme =
-          isDark ? 'dark' : 'light';
+        document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
       }
     })();
   </script>
@@ -88,12 +85,11 @@
       width: 48px;
       height: 48px;
 
-      border-radius: 14px;
+      border-radius: 100%;
 
       background: #4f46e5;
 
-      box-shadow:
-        0 8px 24px -8px rgba(79, 70, 229, 0.5);
+      box-shadow: 0 8px 24px -8px rgba(79, 70, 229, 0.5);
 
       animation: pulse 1.8s ease-in-out infinite;
     }
@@ -132,13 +128,7 @@
     .loader-title {
       margin: 0;
 
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Arial,
-        sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
 
       font-size: 14px;
       font-weight: 600;
@@ -153,13 +143,7 @@
     .loader-subtitle {
       margin: 0;
 
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Arial,
-        sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
 
       font-size: 12px;
 
@@ -202,19 +186,15 @@
       }
     }
   </style>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="manifest" href="manifest.webmanifest" />
 </head>
 
 <body>
   <div id="app-loader">
     <div class="loader-content">
       <div class="loader-mark" aria-hidden="true">
-        <!-- heroCloudArrowUp, matches brand mark used across the app -->
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round">
-          <path d="M7 16a4 4 0 0 1-.88-7.9A5.5 5.5 0 0 1 16.5 6a4.5 4.5 0 0 1 .5 8.98" />
-          <path d="M12 12v9" />
-          <path d="m8 17 4-4 4 4" />
-        </svg>
+        <img src="/icons/icon-72x72.png" alt="TeleStore Logo" />
       </div>
 
       <div class="loader-spinner" role="status" aria-label="Loading"></div>
@@ -234,10 +214,11 @@
 
       // Reassure the user if the bundle is taking unusually long to load.
       var slowTimer = setTimeout(function () {
-        subtitle.textContent = "Still loading — this is taking longer than usual.";
+        subtitle.textContent = 'Still loading — this is taking longer than usual.';
       }, 6000);
     })();
   </script>
+  <noscript>Please enable JavaScript to continue using this application.</noscript>
 </body>
 
 </html>

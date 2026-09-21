@@ -4,13 +4,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { AuthService } from '../../core/services/auth-service';
-import { heroArrowPath, heroCloudArrowUp, heroEnvelope, heroExclamationTriangle, heroEye, heroEyeSlash, heroLockClosed } from '@ng-icons/heroicons/outline';
+import { heroArrowPath, heroEnvelope, heroExclamationTriangle, heroEye, heroEyeSlash, heroLockClosed } from '@ng-icons/heroicons/outline';
 
 @Component({
   imports: [ReactiveFormsModule, RouterLink, NgIcon],
   providers: [
     provideIcons({
-      heroCloudArrowUp,
       heroExclamationTriangle,
       heroEnvelope,
       heroLockClosed,
